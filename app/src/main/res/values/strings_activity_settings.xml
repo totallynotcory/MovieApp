@@ -13,11 +13,11 @@
     <!-- Sort by Internal values -->
     </string-array>
     <string-array name="pref_sort_choices_internal">
-        <item>popular.dsc</item>
-        <item>vote_average.dsc</item>
+        <item>popularity.desc</item>
+        <item>vote_average.desc</item>
     </string-array>
 
-    <string name="pref_sort_by_default">popular.dsc</string>
+    <string name="pref_sort_by_default">popularity.desc</string>
 
 
 </resources>
