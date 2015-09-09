@@ -1,0 +1,2 @@
+# This is where the secret key is stored.
+app/src/main/java/com/corypotwin/movieapp/SecretKeyFile.java
