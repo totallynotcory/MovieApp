@@ -44,7 +44,7 @@ import java.util.List;
 import java.util.Locale;
 
 /**
- * A placeholder fragment containing a simple view.
+ * A fragment containing the Movie grid view
  */
 public class MainActivityFragment extends Fragment {
 
@@ -53,12 +53,6 @@ public class MainActivityFragment extends Fragment {
     private ImageAdapter mImageAdapter;
 
     public MainActivityFragment() {
-    }
-
-    //  TODO debug this and figure out why rotating isn't fixing this
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
     }
 
     @Override
@@ -109,6 +103,7 @@ public class MainActivityFragment extends Fragment {
         mImageAdapter = new ImageAdapter(getActivity());
         gridview.setAdapter(mImageAdapter);
 
+        // On clicking a movie, send data over to the new intent.
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 ArrayList<String> singleMovieDetails =
@@ -119,7 +114,6 @@ public class MainActivityFragment extends Fragment {
             }
         });
         return rootView;
-
     }
 
     /**
@@ -130,55 +124,18 @@ public class MainActivityFragment extends Fragment {
         refresher.execute();
     }
 
-
-    private List<List<String>> getMovieDataFromJson(String urlReturns) throws JSONException {
-
-        List<List<String>> movieData = new ArrayList<List<String>>();
-
-        final String NODE_RESULTS = "results";
-        final String POSTER_KEY = "poster_path";
-        final String TITLE_KEY = "title";
-        final String RELEASE_DATE_KEY = "release_date";
-        final String RATING_KEY = "vote_average";
-        final String OVERVIEW_KEY = "overview";
-        String posterUrl = "http://image.tmdb.org/t/p/" + screenSize + "/";
-
-        JSONObject movieJson = new JSONObject(urlReturns);
-        JSONArray resultsArray = movieJson.getJSONArray(NODE_RESULTS);
-
-        for (int i = 0; i < resultsArray.length(); i++) {
-
-            JSONObject individualMovie = resultsArray.getJSONObject(i);
-
-            String title = individualMovie.getString(TITLE_KEY);
-            String description = individualMovie.getString(OVERVIEW_KEY);
-            String rating = individualMovie.getString(RATING_KEY);
-            String releaseDate = individualMovie.getString(RELEASE_DATE_KEY);
-            String imageUrlTail = individualMovie.getString(POSTER_KEY);
-            String imageUrl = posterUrl + imageUrlTail;
-
-            List<String> movieDetails = new ArrayList<String>();
-            movieDetails.add(title);
-            movieDetails.add(description);
-            movieDetails.add(rating);
-            movieDetails.add(releaseDate);
-            movieDetails.add(imageUrl);
-
-            movieData.add(movieDetails);
-        }
-
-        return movieData;
-    }
-
     /**
      * Creates an ASync thread to request, receive, and parse data from the MovieDB API
-     * Then, on the main thread this will load the information into the ImageAdapter for the grid view
+     * Then, on the main thread, this will load the information into the ImageAdapter for the
+     * grid view and inform the app that data has changed
+     *
      */
     protected class MovieDataFetcher extends AsyncTask<Void, Void, List<List<String>>> {
 
-        final String LOG_TAG = "MovieDataFetercher";
+        final String LOG_TAG = "MovieDataFetcher";
 
-        // TODO remove this when sharing code
+        // SecretKeyFile contains the API key for TheMovieDB.  This file has been added to the
+        // .gitignore file.
         String secretKey = SecretKeyFile.getKey();
 
         protected List<List<String>> doInBackground(Void... params) {
@@ -194,17 +151,18 @@ public class MainActivityFragment extends Fragment {
 
             // Will contain the raw JSON response as a string.
             String movieJsonStr;
-            String currentDate = new SimpleDateFormat("y").format(new Date());
 
             try {
-                // Construct the URL for the OpenWeatherMap query
-                // Possible parameters are avaiable at OWM's forecast API page, at
-                // http://openweathermap.org/API#forecast
+                // Construct the URL for the TheMovieDB query
+                // Full documentation included here: http://docs.themoviedb.apiary.io/#
+
+                String currentDate = new SimpleDateFormat("y").format(new Date());
 
                 final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie";
                 final String SORT_PARAM = "sort_by";
                 final String YEAR_PARAM = "year";
                 final String USER_KEY_PARAM = "api_key";
+
                 Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
                         .appendQueryParameter(YEAR_PARAM, currentDate)
                         .appendQueryParameter(SORT_PARAM, sortBy)
@@ -229,9 +187,6 @@ public class MainActivityFragment extends Fragment {
 
                 String line;
                 while ((line = reader.readLine()) != null) {
-                    // Since it's JSON, adding a newline isn't necessary (it won't affect parsing)
-                    // But it does make debugging a *lot* easier if you print out the completed
-                    // buffer for debugging.
                     buffer.append(line + "\n");
                 }
 
@@ -242,7 +197,7 @@ public class MainActivityFragment extends Fragment {
                 movieJsonStr = buffer.toString();
             } catch (IOException e) {
                 Log.e(LOG_TAG, "Error Connecting", e);
-                // If the code didn't successfully get the weather data, there's no point in attemping
+                // If the code didn't successfully get the movie data, there's no point in attempting
                 // to parse it.
                 return null;
             } finally {
@@ -263,7 +218,7 @@ public class MainActivityFragment extends Fragment {
             } catch (JSONException e) {
                 Log.e(LOG_TAG, "Something went wrong parsing JSON");
             }
-            Log.d("MovieDataFetcher","Finished fetching data");
+
             return null;
         }
 
@@ -276,7 +231,58 @@ public class MainActivityFragment extends Fragment {
             }
             mImageAdapter.notifyDataSetChanged();
         }
+
+        // TODO Add a parcelable object instead of putting data into lists of lists of strings.
+        /**
+         * Used by the MovieFetcherClass to parse the Movie Data from the JSON string returned
+         * from the database
+         *
+         * @param urlReturns - JSON string returned from themovedb
+         * @return - A list of lists, each inner list containing 5 strings (title, description, rating,
+         *  release date, poster image)
+         * @throws JSONException
+         */
+        private List<List<String>> getMovieDataFromJson(String urlReturns) throws JSONException {
+
+            List<List<String>> movieData = new ArrayList<List<String>>();
+
+            final String NODE_RESULTS = "results";
+            final String POSTER_KEY = "poster_path";
+            final String TITLE_KEY = "title";
+            final String RELEASE_DATE_KEY = "release_date";
+            final String RATING_KEY = "vote_average";
+            final String OVERVIEW_KEY = "overview";
+            String posterUrl = "http://image.tmdb.org/t/p/" + screenSize + "/";
+
+            JSONObject movieJson = new JSONObject(urlReturns);
+            JSONArray resultsArray = movieJson.getJSONArray(NODE_RESULTS);
+
+            for (int i = 0; i < resultsArray.length(); i++) {
+
+                JSONObject individualMovie = resultsArray.getJSONObject(i);
+
+                String title = individualMovie.getString(TITLE_KEY);
+                String description = individualMovie.getString(OVERVIEW_KEY);
+                String rating = individualMovie.getString(RATING_KEY);
+                String releaseDate = individualMovie.getString(RELEASE_DATE_KEY);
+                String imageUrlTail = individualMovie.getString(POSTER_KEY);
+                String imageUrl = posterUrl + imageUrlTail;
+
+                List<String> movieDetails = new ArrayList<String>();
+                movieDetails.add(title);
+                movieDetails.add(description);
+                movieDetails.add(rating);
+                movieDetails.add(releaseDate);
+                movieDetails.add(imageUrl);
+
+                movieData.add(movieDetails);
+            }
+
+            return movieData;
+        }
     }
+
+
 
 }
 

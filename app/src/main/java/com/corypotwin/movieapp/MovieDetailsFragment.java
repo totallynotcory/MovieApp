@@ -28,7 +28,6 @@ public class MovieDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
-        // The detail Activity called via intent.  Inspect the intent for forecast data.
         Intent intent = getActivity().getIntent();
         if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
             populateDetailChildViews(intent, rootView);
@@ -37,26 +36,47 @@ public class MovieDetailsFragment extends Fragment {
         return rootView;
     }
 
-    private Void populateDetailChildViews(Intent intent, View rootView){
+    /**
+     * Populates the Child Views in the Movie Details Fragment
+     *
+     * @param intent - Intent to pull data passed from previous activity
+     * @param rootView - Fragment View used to find the appropriate child view from
+     */
+    private void populateDetailChildViews(Intent intent, View rootView){
 
         movieDetailsInHere = intent.getStringArrayListExtra(Intent.EXTRA_TEXT);
 
         // Title
         ((TextView) rootView.findViewById(R.id.title)).setText(movieDetailsInHere.get(0));
+
         // Description
         if(movieDetailsInHere.get(1) == null){
-            ((TextView) rootView.findViewById(R.id.description)).setText("No description yet!");
+            ((TextView) rootView.findViewById(R.id.description))
+                    .setText(R.string.no_description);
         } else {
-            ((TextView) rootView.findViewById(R.id.description)).setText(movieDetailsInHere.get(1));
+            ((TextView) rootView.findViewById(R.id.description))
+                    .setText(movieDetailsInHere.get(1));
         }
+
         // Ratings
         if(movieDetailsInHere.get(2).equals("0.0")){
-            ((TextView) rootView.findViewById(R.id.rating)).setText("No ratings yet!");
+            ((TextView) rootView.findViewById(R.id.rating))
+                    .setText(R.string.no_rating);
         } else {
-            ((TextView) rootView.findViewById(R.id.rating)).setText(movieDetailsInHere.get(2) + "/10");
+            ((TextView) rootView.findViewById(R.id.rating))
+                    .setText("Rating: " + movieDetailsInHere.get(2) + "/10");
         }
+
         // Release Date
-        ((TextView) rootView.findViewById(R.id.release_date)).setText(movieDetailsInHere.get(3));
+        if(movieDetailsInHere.get(3) == null) {
+            ((TextView) rootView.findViewById(R.id.release_date))
+                    .setText(R.string.no_release_date);
+
+        } else {
+            ((TextView) rootView.findViewById(R.id.release_date))
+                    .setText("Release Date:\n" + movieDetailsInHere.get(3));
+        }
+
         // Poster
         ImageView imgView = (ImageView) rootView.findViewById(R.id.movie_poster_detail);
         imgView.setAdjustViewBounds(true);
@@ -65,6 +85,5 @@ public class MovieDetailsFragment extends Fragment {
                 .placeholder(R.drawable.no_image_available_black)
                 .error(R.drawable.no_image_available_black)
                 .into(imgView);
-        return null;
     }
 }

@@ -14,7 +14,6 @@ public class MovieDetails extends AppCompatActivity {
         setContentView(R.layout.activity_movie_details);
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

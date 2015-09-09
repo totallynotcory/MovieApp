@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivityFragment">
 
-
     <GridView
         android:id="@+id/movie_poster_grid"
         android:layout_width="match_parent"
@@ -12,7 +11,6 @@
         android:verticalSpacing="0dp"
         android:horizontalSpacing="0dp"
         android:numColumns="2"
-        android:gravity="center"
         android:stretchMode="columnWidth"
         android:background="#000000"
         />
