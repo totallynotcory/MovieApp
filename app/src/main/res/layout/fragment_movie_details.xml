@@ -63,6 +63,31 @@
                 android:textAppearance="?android:textAppearanceSmall"
                 />
 
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+            <TextView
+                android:padding="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/not_favorite"
+
+                />
+
+            <RatingBar
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:numStars="1"
+                android:stepSize="1"
+                android:id="@+id/favorite_star"
+                android:onClick="favoriteClick"
+                />
+
+
+            </LinearLayout>
+
         </LinearLayout>
     </LinearLayout>
 
@@ -75,6 +100,28 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_margin="16dp"
+        />
+
+    <ImageView
+        android:id="@+id/trailer_1"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:src="@drawable/no_image_available_black"
+        android:padding="16dp"
+        android:contentDescription="Movie Poster" />
+
+    <TextView
+        android:paddingBottom="16dp"
+        android:paddingRight="16dp"
+        android:paddingLeft="16dp"
+        android:id="@+id/reviews"
+        android:text="@string/no_reviews"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
 

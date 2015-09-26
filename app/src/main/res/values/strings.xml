@@ -12,5 +12,8 @@
     <string name="no_rating">No ratings yet!</string>
     <string name="no_release_date">No release date!</string>
     <string name="no_title">No title! How did that happen?</string>
+    <string name="no_reviews">No reviews yet!</string>
 
+    <string name="not_favorite">Favorite?</string>
+    <string name="favorite">Nice choice!</string>
 </resources>

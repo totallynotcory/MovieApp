@@ -54,26 +54,18 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="activity_movie_details.xml" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_movie_details.xml">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-0.0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-          <provider editor-type-id="android-designer">
-            <state />
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="fragment_movie_details.xml" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_movie_details.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="-8.413794">
-              <caret line="62" column="51" selection-start-line="62" selection-start-column="51" selection-end-line="62" selection-end-column="51" />
+            <state vertical-scroll-proportion="-12.413794">
+              <caret line="84" column="46" selection-start-line="84" selection-start-column="33" selection-end-line="84" selection-end-column="46" />
               <folding>
                 <element signature="e#536#554#0" expanded="true" />
+                <element signature="e#1634#1659#0" expanded="true" />
+                <element signature="e#1987#2006#0" expanded="true" />
+                <element signature="e#2617#2639#0" expanded="true" />
+                <element signature="e#3235#3259#0" expanded="true" />
+                <element signature="e#3937#3957#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -82,28 +74,35 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FullTestSuite.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/utils/FullTestSuite.java">
+      <file leaf-file-name="MainActivityFragment.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/MainActivityFragment.java">
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0">
-              <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-              <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#383#384#0" expanded="true" />
-                <element signature="e#406#407#0" expanded="true" />
-              </folding>
+              <caret line="246" column="26" selection-start-line="246" selection-start-column="26" selection-end-line="246" selection-end-column="26" />
+              <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="FavoriteMovieProvider.java" pinned="false" current-in-tab="true">
+      <file leaf-file-name="MovieDetailsFragment.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/MovieDetailsFragment.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.9209139">
+              <caret line="127" column="9" selection-start-line="127" selection-start-column="9" selection-end-line="127" selection-end-column="9" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="FavoriteMovieProvider.java" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/favdata/FavoriteMovieProvider.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.4028436">
-              <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
+            <state vertical-scroll-proportion="0.0">
+              <caret line="25" column="42" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="method#onCreate#0;class#FavoriteMovieProvider#0" expanded="false" />
+                <element signature="e#593#594#0" expanded="true" />
                 <element signature="e#669#670#0" expanded="true" />
                 <element signature="method#query#0;class#FavoriteMovieProvider#0" expanded="false" />
                 <element signature="method#insert#0;class#FavoriteMovieProvider#0" expanded="false" />
@@ -1577,10 +1576,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/SecretKeyFile.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/menu/menu_movie_details.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/values/styles.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_movie_details.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/grid_item.xml" />
-        <option value="$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/MovieDetailsFragment.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_main.xml" />
         <option value="$PROJECT_DIR$/app/src/main/AndroidManifest.xml" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/MovieDetails.java" />
@@ -1592,6 +1588,9 @@
         <option value="$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/favdata/FavoriteMovieDbHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/utils/FullTestSuite.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/favdata/FavoriteMovieProvider.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/res/layout/fragment_movie_details.xml" />
+        <option value="$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/MovieDetailsFragment.java" />
       </list>
     </option>
   </component>
@@ -1608,8 +1607,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-1894" />
     <option name="y" value="-113" />
-    <option name="width" value="1276" />
-    <option name="height" value="777" />
+    <option name="width" value="1235" />
+    <option name="height" value="1000" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -1879,6 +1878,36 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="drawable" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Movie App" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="MovieApp" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="src" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="main" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="java" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -1994,7 +2023,7 @@
     <property name="settings.editor.selected.configurable" value="android.sdk-updates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
     <property name="recentsLimit" value="5" />
-    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="" />
+    <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_SERIALS" value="emulator-5554" />
     <property name="ANDROID_EXTENDED_DEVICE_CHOOSER_AVD" value="Nexus_5_API_21_x86" />
     <property name="FullScreen" value="false" />
     <property name="OverrideImplement.combined" value="true" />
@@ -2225,7 +2254,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1894" y="-113" width="1276" height="777" extended-state="0" />
+    <frame x="-1894" y="-113" width="1235" height="1000" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32826087" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -2235,15 +2264,15 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32826087" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963988" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Preview" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32901135" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32526475" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.37367624" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Captures" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32963988" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
-      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.43419063" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
+      <window_info id="Android" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32466063" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Gradle Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32929516" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.26094005" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.2699078" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Gradle" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -2279,7 +2308,7 @@
       <breakpoints-dialog>
         <breakpoints-dialog />
       </breakpoints-dialog>
-      <option name="time" value="129" />
+      <option name="time" value="130" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -2498,14 +2527,6 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6">
-          <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/support-v4/22.2.1/support-v4-22.2.1-sources.jar!/android/support/v4/app/FragmentManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
@@ -2564,24 +2585,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/MainActivityFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-7.7777777">
-          <caret line="88" column="70" selection-start-line="88" selection-start-column="70" selection-end-line="88" selection-end-column="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/SettingsActivity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.70149255">
           <caret line="54" column="75" selection-start-line="54" selection-start-column="75" selection-end-line="54" selection-end-column="75" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/MovieDetailsFragment.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="27" column="56" selection-start-line="27" selection-start-column="56" selection-end-line="27" selection-end-column="56" />
         </state>
       </provider>
     </entry>
@@ -2613,46 +2620,12 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/ImageAdapter.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="49" column="5" selection-start-line="49" selection-start-column="5" selection-end-line="49" selection-end-column="5" />
-          <folding>
-            <element signature="e#1169#1170#0" expanded="true" />
-            <element signature="e#1218#1219#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_movie_details.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-      <provider editor-type-id="android-designer">
-        <state />
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/favdata/FavoriteMovieDbHelper.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="9" column="21" selection-start-line="9" selection-start-column="21" selection-end-line="9" selection-end-column="21" />
           <folding>
             <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/utils/FullTestSuite.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#383#384#0" expanded="true" />
-            <element signature="e#406#407#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2669,12 +2642,84 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/activity_movie_details.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="android-designer">
+        <state />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/ImageAdapter.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="49" column="5" selection-start-line="49" selection-start-column="5" selection-end-line="49" selection-end-column="5" />
+          <folding>
+            <element signature="e#1169#1170#0" expanded="true" />
+            <element signature="e#1218#1219#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-9.444445">
+          <caret line="17" column="40" selection-start-line="17" selection-start-column="40" selection-end-line="17" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/utils/FullTestSuite.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.44815466">
+          <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#383#384#0" expanded="true" />
+            <element signature="e#406#407#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/MainActivityFragment.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="246" column="26" selection-start-line="246" selection-start-column="26" selection-end-line="246" selection-end-column="26" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/favdata/FavoriteMovieProvider.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0">
+          <caret line="25" column="42" selection-start-line="25" selection-start-column="42" selection-end-line="25" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="method#onCreate#0;class#FavoriteMovieProvider#0" expanded="false" />
+            <element signature="e#593#594#0" expanded="true" />
+            <element signature="e#669#670#0" expanded="true" />
+            <element signature="method#query#0;class#FavoriteMovieProvider#0" expanded="false" />
+            <element signature="method#insert#0;class#FavoriteMovieProvider#0" expanded="false" />
+            <element signature="method#delete#0;class#FavoriteMovieProvider#0" expanded="false" />
+            <element signature="method#update#0;class#FavoriteMovieProvider#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/res/layout/fragment_movie_details.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-8.413794">
-          <caret line="62" column="51" selection-start-line="62" selection-start-column="51" selection-end-line="62" selection-end-column="51" />
+        <state vertical-scroll-proportion="-12.413794">
+          <caret line="84" column="46" selection-start-line="84" selection-start-column="33" selection-end-line="84" selection-end-column="46" />
           <folding>
             <element signature="e#536#554#0" expanded="true" />
+            <element signature="e#1634#1659#0" expanded="true" />
+            <element signature="e#1987#2006#0" expanded="true" />
+            <element signature="e#2617#2639#0" expanded="true" />
+            <element signature="e#3235#3259#0" expanded="true" />
+            <element signature="e#3937#3957#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -2682,19 +2727,11 @@
         <state />
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/favdata/FavoriteMovieProvider.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/com/corypotwin/movieapp/MovieDetailsFragment.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.4028436">
-          <caret line="20" column="36" selection-start-line="20" selection-start-column="36" selection-end-line="20" selection-end-column="36" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#onCreate#0;class#FavoriteMovieProvider#0" expanded="false" />
-            <element signature="e#669#670#0" expanded="true" />
-            <element signature="method#query#0;class#FavoriteMovieProvider#0" expanded="false" />
-            <element signature="method#insert#0;class#FavoriteMovieProvider#0" expanded="false" />
-            <element signature="method#delete#0;class#FavoriteMovieProvider#0" expanded="false" />
-            <element signature="method#update#0;class#FavoriteMovieProvider#0" expanded="false" />
-          </folding>
+        <state vertical-scroll-proportion="0.9209139">
+          <caret line="127" column="9" selection-start-line="127" selection-start-column="9" selection-end-line="127" selection-end-column="9" />
+          <folding />
         </state>
       </provider>
     </entry>
