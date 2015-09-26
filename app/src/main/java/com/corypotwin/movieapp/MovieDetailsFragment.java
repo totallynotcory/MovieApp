@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public class MovieDetailsFragment extends Fragment {
 
-    ArrayList<String> movieDetailsInHere;
+    private Movie movieDetailsInHere;
     private String movieTitle;
 
     public MovieDetailsFragment() {
@@ -49,45 +49,45 @@ public class MovieDetailsFragment extends Fragment {
      */
     private void populateDetailChildViews(Intent intent, View rootView){
 
-        movieDetailsInHere = intent.getStringArrayListExtra(Intent.EXTRA_TEXT);
+        movieDetailsInHere = intent.getParcelableExtra(Intent.EXTRA_TEXT);
 
         // Title
-        movieTitle = movieDetailsInHere.get(0);
+        movieTitle = movieDetailsInHere.getmTitle();
         ((TextView) rootView.findViewById(R.id.title)).setText(movieTitle);
 
         // Description
-        if(movieDetailsInHere.get(1) == null){
+        if(movieDetailsInHere.getmDescription() == null){
             ((TextView) rootView.findViewById(R.id.description))
                     .setText(R.string.no_description);
         } else {
             ((TextView) rootView.findViewById(R.id.description))
-                    .setText(movieDetailsInHere.get(1));
+                    .setText(movieDetailsInHere.getmDescription());
         }
 
         // Ratings
-        if(movieDetailsInHere.get(2).equals("0.0")){
+        if(movieDetailsInHere.getmRating().equals("0.0")){
             ((TextView) rootView.findViewById(R.id.rating))
                     .setText(R.string.no_rating);
         } else {
             ((TextView) rootView.findViewById(R.id.rating))
-                    .setText("Rating: " + movieDetailsInHere.get(2) + "/10");
+                    .setText("Rating: " + movieDetailsInHere.getmRating() + "/10");
         }
 
         // Release Date
-        if(movieDetailsInHere.get(3) == null) {
+        if(movieDetailsInHere.getmReleaseDate() == null) {
             ((TextView) rootView.findViewById(R.id.release_date))
                     .setText(R.string.no_release_date);
 
         } else {
             ((TextView) rootView.findViewById(R.id.release_date))
-                    .setText("Release Date:\n" + movieDetailsInHere.get(3));
+                    .setText("Release Date:\n" + movieDetailsInHere.getmReleaseDate());
         }
 
         // Poster
         ImageView imgView = (ImageView) rootView.findViewById(R.id.movie_poster_detail);
         imgView.setAdjustViewBounds(true);
         Picasso.with(getActivity())
-                .load(movieDetailsInHere.get(4))
+                .load(movieDetailsInHere.getmPosterUrl())
                 .placeholder(R.drawable.no_image_available_black)
                 .error(R.drawable.no_image_available_black)
                 .into(imgView);

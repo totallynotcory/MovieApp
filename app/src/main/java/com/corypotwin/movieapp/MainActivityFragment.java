@@ -73,10 +73,8 @@ public class MainActivityFragment extends Fragment {
         // we need to refresh. This include the initial load as well.
         if(!sortBy.equals(sortBySetting)){
             sortBySetting = sortBy;
-            if(sortBySetting != "favorites") {
-                refreshMovieData();
-            }
-            // TODO add else cause for when the favorites are brought in
+            refreshMovieData();
+
         }
 
     }
@@ -126,10 +124,9 @@ public class MainActivityFragment extends Fragment {
         // On clicking a movie, send data over to the new intent.
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                ArrayList<String> singleMovieDetails =
-                        (ArrayList) mImageAdapter.getFullSingleMovieDetails(position);
+                Movie singleMovieDetails = mImageAdapter.getFullSingleMovieDetails(position);
                 Intent intent = new Intent(getActivity(), MovieDetails.class)
-                        .putStringArrayListExtra(Intent.EXTRA_TEXT, singleMovieDetails);
+                        .putExtra(Intent.EXTRA_TEXT, singleMovieDetails);
                 startActivity(intent);
             }
         });
@@ -140,8 +137,11 @@ public class MainActivityFragment extends Fragment {
      * Refreshes the movie data from the MovieDB API
      */
     public void refreshMovieData() {
-        MovieDataFetcher refresher = new MovieDataFetcher();
-        refresher.execute();
+        if(sortBySetting != "favorites") {
+            MovieDataFetcher refresher = new MovieDataFetcher();
+            refresher.execute();
+        }
+        // TODO else { get favorites from DB }
     }
 
     /**
@@ -154,6 +154,8 @@ public class MainActivityFragment extends Fragment {
 
         final String LOG_TAG = "MovieDataFetcher";
 
+        final String MOVIE_BASE_URL = "http://api.themoviedb.org/3";
+        final String USER_KEY_PARAM = "api_key";
         // SecretKeyFile contains the API key for TheMovieDB.  This file has been added to the
         // .gitignore file.
         String secretKey = SecretKeyFile.getKey();
@@ -178,12 +180,14 @@ public class MainActivityFragment extends Fragment {
                 }
                 String currentDate = new SimpleDateFormat("y").format(new Date());
 
-                final String MOVIE_BASE_URL = "http://api.themoviedb.org/3/discover/movie";
                 final String SORT_PARAM = "sort_by";
                 final String YEAR_PARAM = "year";
-                final String USER_KEY_PARAM = "api_key";
+                final String DISCOVER_PATH = "discover";
+                final String MOVIE_PATH = "movie";
 
                 Uri builtUri = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                        .appendPath(DISCOVER_PATH)
+                        .appendPath(MOVIE_PATH)
                         .appendQueryParameter(YEAR_PARAM, currentDate)
                         .appendQueryParameter(SORT_PARAM, sortBySetting)
                         .appendQueryParameter(USER_KEY_PARAM, secretKey)
@@ -279,6 +283,8 @@ public class MainActivityFragment extends Fragment {
             final String RATING_KEY = "vote_average";
             final String OVERVIEW_KEY = "overview";
             String posterUrl = "http://image.tmdb.org/t/p/" + screenSize + "/";
+            final String TRAILERS_URL_ADD = "videos";
+            final String REVIEWS_URL_ADD = "reviews";
 
             JSONObject movieJson = new JSONObject(urlReturns);
             JSONArray resultsArray = movieJson.getJSONArray(NODE_RESULTS);
@@ -292,11 +298,27 @@ public class MainActivityFragment extends Fragment {
                 String description = individualMovie.getString(OVERVIEW_KEY);
                 String rating = individualMovie.getString(RATING_KEY);
                 String releaseDate = individualMovie.getString(RELEASE_DATE_KEY);
-                String imageUrlTail = individualMovie.getString(POSTER_KEY);
-                String imageUrl = posterUrl + imageUrlTail;
+                String imageUrl= posterUrl + individualMovie.getString(POSTER_KEY);
+
+                String trailerUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                        .appendPath("movie")
+                        .appendPath(id + "")
+                        .appendPath(TRAILERS_URL_ADD)
+                        .appendQueryParameter(USER_KEY_PARAM, secretKey)
+                        .build()
+                        .toString();
+
+                String reviewsUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                        .appendPath("movie")
+                        .appendPath(id + "")
+                        .appendPath(REVIEWS_URL_ADD)
+                        .appendQueryParameter(USER_KEY_PARAM, secretKey)
+                        .build()
+                        .toString();
+
 
                 Movie thisMovie = new Movie(id, title, description, rating,
-                        releaseDate, imageUrl, "", "");
+                        releaseDate, imageUrl, trailerUrl, reviewsUrl);
 
                 movieData.add(thisMovie);
             }
