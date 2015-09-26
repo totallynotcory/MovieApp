@@ -18,11 +18,11 @@ import java.util.List;
 public class ImageAdapter extends BaseAdapter  {
     private final String LOG_TAG = "ImageAdapter";
     private Context mContext;
-    private List<List<String>> movieResults;
+    private List<Movie> movieResults;
 
     public ImageAdapter(Context c) {
         mContext = c;
-        movieResults = new ArrayList<List<String>>();
+        movieResults = new ArrayList<>();
     }
 
     public int getCount() {
@@ -30,14 +30,14 @@ public class ImageAdapter extends BaseAdapter  {
     }
 
     public String getItem(int position) {
-        return movieResults.get(position).get(4);
+        return movieResults.get(position).getmPosterUrl();
     }
 
-    public List<String> getFullSingleMovieDetails(int position){
+    public Movie getFullSingleMovieDetails(int position){
         return movieResults.get(position);
     }
 
-    public List<List<String>> getMovieResults(){
+    public List<Movie> getMovieResults(){
         return movieResults;
     }
 
@@ -45,7 +45,7 @@ public class ImageAdapter extends BaseAdapter  {
         return 0;
     }
 
-    public void add (List<String> singleMovieData){
+    public void add (Movie singleMovieData){
         movieResults.add(singleMovieData);
     }
 
@@ -61,7 +61,8 @@ public class ImageAdapter extends BaseAdapter  {
         View v;
 
         if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            LayoutInflater inflater = (LayoutInflater)
+                    mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             // if it's not recycled, initialize some attributes
             v = inflater.inflate(R.layout.grid_item, null);
             imageView = (ImageView) v.findViewById(R.id.movie_poster_image_view);

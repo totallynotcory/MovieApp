@@ -73,7 +73,10 @@ public class MainActivityFragment extends Fragment {
         // we need to refresh. This include the initial load as well.
         if(!sortBy.equals(sortBySetting)){
             sortBySetting = sortBy;
-            refreshMovieData();
+            if(sortBySetting != "favorites") {
+                refreshMovieData();
+            }
+            // TODO add else cause for when the favorites are brought in
         }
 
     }
@@ -147,7 +150,7 @@ public class MainActivityFragment extends Fragment {
      * grid view and inform the app that data has changed
      *
      */
-    protected class MovieDataFetcher extends AsyncTask<Void, Void, List<List<String>>> {
+    protected class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
 
         final String LOG_TAG = "MovieDataFetcher";
 
@@ -155,7 +158,7 @@ public class MainActivityFragment extends Fragment {
         // .gitignore file.
         String secretKey = SecretKeyFile.getKey();
 
-        protected List<List<String>> doInBackground(Void... params) {
+        protected List<Movie> doInBackground(Void... params) {
 
             // These two need to be declared outside the try/catch
             // so that they can be closed in the finally block.
@@ -239,7 +242,7 @@ public class MainActivityFragment extends Fragment {
             return null;
         }
 
-        protected void onPostExecute(List<List<String>> movieResults){
+        protected void onPostExecute(List<Movie> movieResults){
             TextView noConnection = (TextView) getView().findViewById(R.id.no_connection);
 
             if (movieResults != null){
@@ -255,7 +258,6 @@ public class MainActivityFragment extends Fragment {
             mImageAdapter.notifyDataSetChanged();
         }
 
-        // TODO Add a parcelable object instead of putting data into lists of lists of strings.
         /**
          * Used by the MovieFetcherClass to parse the Movie Data from the JSON string returned
          * from the database
@@ -265,12 +267,13 @@ public class MainActivityFragment extends Fragment {
          *  release date, poster image)
          * @throws JSONException
          */
-        private List<List<String>> getMovieDataFromJson(String urlReturns) throws JSONException {
+        private List<Movie> getMovieDataFromJson(String urlReturns) throws JSONException {
 
-            List<List<String>> movieData = new ArrayList<List<String>>();
+            List<Movie> movieData = new ArrayList<>();
 
             final String NODE_RESULTS = "results";
             final String POSTER_KEY = "poster_path";
+            final String MOVIE_ID = "id";
             final String TITLE_KEY = "title";
             final String RELEASE_DATE_KEY = "release_date";
             final String RATING_KEY = "vote_average";
@@ -284,6 +287,7 @@ public class MainActivityFragment extends Fragment {
 
                 JSONObject individualMovie = resultsArray.getJSONObject(i);
 
+                int id = individualMovie.getInt(MOVIE_ID);
                 String title = individualMovie.getString(TITLE_KEY);
                 String description = individualMovie.getString(OVERVIEW_KEY);
                 String rating = individualMovie.getString(RATING_KEY);
@@ -291,19 +295,14 @@ public class MainActivityFragment extends Fragment {
                 String imageUrlTail = individualMovie.getString(POSTER_KEY);
                 String imageUrl = posterUrl + imageUrlTail;
 
-                List<String> movieDetails = new ArrayList<String>();
-                movieDetails.add(title);
-                movieDetails.add(description);
-                movieDetails.add(rating);
-                movieDetails.add(releaseDate);
-                movieDetails.add(imageUrl);
+                Movie thisMovie = new Movie(id, title, description, rating,
+                        releaseDate, imageUrl, "", "");
 
-                movieData.add(movieDetails);
+                movieData.add(thisMovie);
             }
 
             return movieData;
         }
-
 
         private boolean isNetWorkAvailable() {
             ConnectivityManager connectivityManager =

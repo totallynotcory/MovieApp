@@ -92,11 +92,11 @@ public class MovieDetailsFragment extends Fragment {
                 .error(R.drawable.no_image_available_black)
                 .into(imgView);
 
-        // Favorite
+/*        // Favorite
         RatingBar favoriteStar = (RatingBar) rootView.findViewById(R.id.favorite_star);
         if(setFavorite()){
             favoriteStar.setRating(1);
-        }
+        }*/
     }
 
     public boolean setFavorite(){
