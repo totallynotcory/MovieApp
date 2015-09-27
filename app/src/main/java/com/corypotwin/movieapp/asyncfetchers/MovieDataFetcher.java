@@ -69,7 +69,7 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
     protected List<Movie> doInBackground(Void... params) {
 
         //  I feel like initiating this as "" is kind of a bad practice...
-        // TODO is this a bad idea?
+        // TODO figure out: is this a bad idea?
         String movieJsonStr = "";
         URL url;
         // These two need to be declared outside the try/catch

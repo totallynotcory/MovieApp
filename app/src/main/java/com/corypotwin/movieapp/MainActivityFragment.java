@@ -2,6 +2,7 @@ package com.corypotwin.movieapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -95,9 +96,7 @@ public class MainActivityFragment extends Fragment {
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 Movie singleMovieDetails = mImageAdapter.getFullSingleMovieDetails(position);
-                Intent intent = new Intent(getActivity(), MovieDetails.class)
-                        .putExtra(Intent.EXTRA_TEXT, singleMovieDetails);
-                startActivity(intent);
+                ((Callback) getActivity()).onItemSelected(singleMovieDetails);
             }
         });
         return rootView;
@@ -115,8 +114,14 @@ public class MainActivityFragment extends Fragment {
         // TODO else { get favorites from DB }
     }
 
+    /**
+     * For any Activity that includes this Fragment, they must define behavior for this Callback
+     * Otherwise, nothing will happen when a Movie is clicked
+     */
 
-
+    public interface Callback {
+        public void onItemSelected(Movie singleMovieDetails);
+        }
 }
 
 

@@ -6,6 +6,7 @@ import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.corypotwin.movieapp.Movie;
@@ -24,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -38,13 +40,17 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Void> {
     private URL reviewUrl;
     private URL trailerUrl;
     private Context mContext;
+    private View mRootView;
 
-    public DetailDataFetcher(int id, String rUrl, String tUrl, Context context)
+    private ReviewsAndTrailers revsAndTrailsForThisMovie;
+
+    public DetailDataFetcher(int id, String rUrl, String tUrl, Context context, View rootView)
             throws MalformedURLException{
         movieId = id;
         reviewUrl = new URL(rUrl);
         trailerUrl = new URL(tUrl);
         mContext = context;
+        mRootView = rootView;
     }
 
     protected Void doInBackground(Void... params) {
@@ -53,46 +59,63 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Void> {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
+        String reviewJsonStr;
+        String trailerJsonStr;
+
+        List<List<String>> reviews = new ArrayList<>();
+        List<String> trailers = new ArrayList<>();
+
         // Will contain the raw JSON responses as a strings.
         UrlConnector reviewConnection = new UrlConnector(reviewUrl, LOG_TAG);
         if (reviewConnection.isNetWorkAvailable(mContext)) {
-            String reviewJsonStr = reviewConnection.connectAndGetJson();
+            reviewJsonStr = reviewConnection.connectAndGetJson();
+        } else {
+            reviewJsonStr = "error";
         }
 
         UrlConnector trailerConnection = new UrlConnector(trailerUrl, LOG_TAG);
         if (trailerConnection.isNetWorkAvailable(mContext)) {
-            String trailerJsonStr = trailerConnection.connectAndGetJson();
+            trailerJsonStr = trailerConnection.connectAndGetJson();
+        } else {
+            trailerJsonStr = "error";
         }
 
-/*
-
-
         try {
-            return getMovieDataFromJson(movieJsonStr);
+            reviews = getReviewDataFromJson(reviewJsonStr);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Something went wrong parsing JSON");
         }
 
+
+        try {
+            trailers = getTrailerDataFromJson(trailerJsonStr);
+        } catch (JSONException e) {
+            Log.e(LOG_TAG, "Something went wrong parsing JSON");
+        }
+
+        revsAndTrailsForThisMovie = new ReviewsAndTrailers(reviews, trailers);
+
         return null;
     }
 
+/*
     protected void onPostExecute(List<Movie> movieResults){
-        TextView noConnection = (TextView) mActivity.findViewById(R.id.no_connection);
 
-        if (movieResults != null){
-            mImageAdapter.clear();
+        if (revsAndTrailsForThisMovie.getReviews()){
+
             for (int i = 0; i < movieResults.size(); i++) {
-                mImageAdapter.add(movieResults.get(i));
-            }
-            noConnection.setText("");
-        } else {
-            mImageAdapter.clear();
-            noConnection.setText("Cannot Establish Connection");
-        }
-        mImageAdapter.notifyDataSetChanged();
-    }
 
-    */
+            }
+        }
+
+        if (!revsAndTrailsForThisMovie.getReviews().equals(null)){
+
+        }
+        mContext.notifyDataSetChanged();
+*/
+
+//    }
+
 /**
  * Used by the MovieFetcherClass to parse the Movie Data from the JSON string returned
  * from the database
@@ -101,22 +124,41 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Void> {
  * @return - A list of lists, each inner list containing 5 strings (title, description, rating,
  *  release date, poster image)
  * @throws JSONException
- *//*
+ * */
 
-    private List<Movie> getMovieDataFromJson(String urlReturns) throws JSONException {
+    private List<List<String>> getReviewDataFromJson(String urlReturns) throws JSONException {
 
-        List<Movie> movieData = new ArrayList<>();
+        List<List<String>> reviews = new ArrayList<>();
+        final String NODE_RESULTS = "results";
+        final String AUTHOR_KEY = "author";
+        final String CONTENT_ID = "content";
+
+        JSONObject movieJson = new JSONObject(urlReturns);
+        JSONArray resultsArray = movieJson.getJSONArray(NODE_RESULTS);
+
+        for (int i = 0; i < resultsArray.length(); i++) {
+
+            JSONObject individualReview = resultsArray.getJSONObject(i);
+
+            String author = individualReview.getString(AUTHOR_KEY);
+            String review = individualReview.getString(CONTENT_ID);
+
+            List<String> reviewWithAuthor = Arrays.asList(review, author);
+            reviews.add(reviewWithAuthor);
+        }
+
+        return reviews;
+    }
+
+    private List<String> getTrailerDataFromJson(String urlReturns) throws JSONException {
+
+        List<String> trailers = new ArrayList<>();
 
         final String NODE_RESULTS = "results";
-        final String POSTER_KEY = "poster_path";
-        final String MOVIE_ID = "id";
-        final String TITLE_KEY = "title";
-        final String RELEASE_DATE_KEY = "release_date";
-        final String RATING_KEY = "vote_average";
-        final String OVERVIEW_KEY = "overview";
-        String posterUrl = "http://image.tmdb.org/t/p/" + screenSize + "/";
-        final String TRAILERS_URL_ADD = "videos";
-        final String REVIEWS_URL_ADD = "reviews";
+        final String TRAILER_KEY = "key";
+        final String SITE_KEY = "site";
+        final String TYPE_KEY = "type";
+        String youtubeBaseUrl = "https://www.youtube.com/watch?v=";
 
         JSONObject movieJson = new JSONObject(urlReturns);
         JSONArray resultsArray = movieJson.getJSONArray(NODE_RESULTS);
@@ -125,40 +167,49 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Void> {
 
             JSONObject individualMovie = resultsArray.getJSONObject(i);
 
-            int id = individualMovie.getInt(MOVIE_ID);
-            String title = individualMovie.getString(TITLE_KEY);
-            String description = individualMovie.getString(OVERVIEW_KEY);
-            String rating = individualMovie.getString(RATING_KEY);
-            String releaseDate = individualMovie.getString(RELEASE_DATE_KEY);
-            String imageUrl= posterUrl + individualMovie.getString(POSTER_KEY);
+            String type = individualMovie.getString(TYPE_KEY);
+            String site = individualMovie.getString(SITE_KEY);
+            String trailerKey = individualMovie.getString(TRAILER_KEY);
 
-            String trailerUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
-                    .appendPath("movie")
-                    .appendPath(id + "")
-                    .appendPath(TRAILERS_URL_ADD)
-                    .appendQueryParameter(USER_KEY_PARAM, secretKey)
-                    .build()
-                    .toString();
+            if(type.equals("Trailer")){
+                if(site.equals("YouTube")){
+                    String returnUrl = youtubeBaseUrl + trailerKey;
+                    trailers.add(returnUrl);
+                }
+            }
 
-            String reviewsUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
-                    .appendPath("movie")
-                    .appendPath(id + "")
-                    .appendPath(REVIEWS_URL_ADD)
-                    .appendQueryParameter(USER_KEY_PARAM, secretKey)
-                    .build()
-                    .toString();
-
-
-            Movie thisMovie = new Movie(id, title, description, rating,
-                    releaseDate, imageUrl, trailerUrl, reviewsUrl);
-
-            movieData.add(thisMovie);
         }
 
-        return movieData;
-    }
-*/
-        return null;
+        return trailers;
     }
 
+    final class ReviewsAndTrailers {
+
+        private List<List<String>> reviews;
+        private List<String> trailers;
+
+        public ReviewsAndTrailers(List<List<String>> revs, List<String> trails){
+            reviews = revs;
+            trailers = trails;
+        }
+
+        public List<List<String>> getReviews() {
+            return reviews;
+        }
+
+        public void setReviews(List<List<String>> reviews) {
+            this.reviews = reviews;
+        }
+
+        public List<String> getTrailers() {
+            return trailers;
+        }
+
+        public void setTrailers(List<String> trailers) {
+            this.trailers = trailers;
+        }
+
+
+
+    }
 }

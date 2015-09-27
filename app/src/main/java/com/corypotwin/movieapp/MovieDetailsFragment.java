@@ -33,23 +33,29 @@ public class MovieDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
-        Intent intent = getActivity().getIntent();
-        if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-            populateDetailChildViews(intent, rootView);
+        Bundle args = getArguments();
+        if(args != null){
+            movieDetailsInHere = args.getParcelable("MOVIE");
+        } else {
+            Intent intent = getActivity().getIntent();
+            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
+                movieDetailsInHere = intent.getParcelableExtra(Intent.EXTRA_TEXT);
+            } else {
+                return null;
+            }
         }
 
+        populateDetailChildViews(rootView);
         return rootView;
+
     }
 
     /**
      * Populates the Child Views in the Movie Details Fragment
      *
-     * @param intent - Intent to pull data passed from previous activity
      * @param rootView - Fragment View used to find the appropriate child view from
      */
-    private void populateDetailChildViews(Intent intent, View rootView){
-
-        movieDetailsInHere = intent.getParcelableExtra(Intent.EXTRA_TEXT);
+    private void populateDetailChildViews(View rootView){
 
         // Title
         movieTitle = movieDetailsInHere.getmTitle();
