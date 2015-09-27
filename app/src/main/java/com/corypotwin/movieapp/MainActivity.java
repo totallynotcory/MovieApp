@@ -1,7 +1,9 @@
 package com.corypotwin.movieapp;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -11,11 +13,15 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
     private boolean mTwoPane;
+    private String sortBySetting;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sortBySetting = PreferenceManager.getDefaultSharedPreferences(this).getString(
+                getString(R.string.pref_sort_by_key),
+                getString(R.string.pref_sort_by_default));;
 
         if (findViewById(R.id.detail_fragment) != null) {
             // The detail container view will be present only in the large-screen layouts
@@ -39,25 +45,34 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         forecastFragment.setUseTodayLayout(!mTwoPane);*/
     }
 
-/*
+
     @Override
     protected void onResume() {
         super.onResume();
-        String location = Utility.getPreferredLocation( this );
-        // update the location in our second pane using the fragment manager
-        if (location != null && !location.equals(mLocation)) {
-            ForecastFragment ff = (ForecastFragment)getSupportFragmentManager().findFragmentById(R.id.fragment_forecast);
-            if ( null != ff ) {
-                ff.onLocationChanged();
+        // Grab the sortBy preference
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        String sortBy = prefs.getString(
+                getString(R.string.pref_sort_by_key),
+                getString(R.string.pref_sort_by_default));
+
+        // If the previous sortBy preference does not match the current preference,
+        // we need to refresh. This include the initial load as well.
+        if(!sortBy.equals(sortBySetting)){
+            sortBySetting = sortBy;
+            MainActivityFragment mf = (MainActivityFragment) getSupportFragmentManager()
+                    .findFragmentById(R.id.main_fragment);
+            if( null != mf ) {
+                mf.refreshMovieData();
             }
-            DetailFragment df = (DetailFragment)getSupportFragmentManager().findFragmentByTag(DETAILFRAGMENT_TAG);
-            if ( null != df ) {
-                df.onLocationChanged(location);
+            MovieDetailsFragment mdf = (MovieDetailsFragment) getSupportFragmentManager()
+                    .findFragmentByTag(DETAILFRAGMENT_TAG);
+            if ( null != mdf ) {
+                onItemSelected(mf.getmImageAdapter().getFullSingleMovieDetails(0));
             }
-            mLocation = location;
         }
     }
-*/
+
+
 
     /*
     Fragmentmanager fm = getFragmentManager();

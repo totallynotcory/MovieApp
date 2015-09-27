@@ -24,6 +24,10 @@ public class MainActivityFragment extends Fragment {
 
     //  TODO for future versions, it might be necessary to change the width of the imported images
 
+    public ImageAdapter getmImageAdapter() {
+        return mImageAdapter;
+    }
+
     private ImageAdapter mImageAdapter;
     private String sortBySetting;
 
