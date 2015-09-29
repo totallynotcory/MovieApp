@@ -1,14 +1,18 @@
 package com.corypotwin.movieapp.asyncfetchers;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.corypotwin.movieapp.R;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -69,7 +73,7 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
         }
 
         try {
-            URL trailerUrlUrl = new URL(reviewUrl);
+            URL trailerUrlUrl = new URL(trailerUrl);
             UrlConnector trailerConnection = new UrlConnector(trailerUrlUrl, LOG_TAG);
             if (trailerConnection.isNetWorkAvailable(mContext)) {
                 trailerJsonStr = trailerConnection.connectAndGetJson();
@@ -87,11 +91,11 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
         }
 
 
-/*        try {
+        try {
             trailers = getTrailerDataFromJson(trailerJsonStr);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Something went wrong parsing trailer JSON");
-        }*/
+        }
 
         revsAndTrailsForThisMovie = new ReviewsAndTrailers(reviews, trailers);
         return 1;
@@ -100,10 +104,75 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
 
     protected void onPostExecute(Integer one){
 
+        // Add trailers if we've got any
+        if (revsAndTrailsForThisMovie.hasTrailers()){
+
+            String youtubeBaseVideoUrl = "https://www.youtube.com/watch?v=";
+            String youtubeBaseJpgUrl = "http://img.youtube.com/vi/";
+
+            LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            List<String> allTrailers = revsAndTrailsForThisMovie.getTrailers();
+
+            TextView trailersHeader = (TextView) mRootView.findViewById(R.id.trailer_header);
+            trailersHeader.setText(mContext.getString(R.string.trailers_header));
+
+            ViewGroup insertPoint = (ViewGroup) mRootView.findViewById(R.id.trailers_container);
+
+            for (int i = 0; i < revsAndTrailsForThisMovie.trailerSize(); i++) {
+
+                View trailerView = vi.inflate(R.layout.trailer_item, null);
+
+                ImageView image = (ImageView) trailerView.findViewById(R.id.trailer_image);
+                TextView text = (TextView) trailerView.findViewById(R.id.trailer_title);
+
+                String imageUrl = youtubeBaseJpgUrl +
+                        revsAndTrailsForThisMovie.getTrailers().get(i) + "/0.jpg";
+
+                Picasso.with(mContext).
+                        load(imageUrl).
+                        placeholder(R.drawable.no_image_available_white).
+                        error(R.drawable.no_image_available_black).
+                        into(image);
+
+                image.setImageResource(R.drawable.no_image_available_black);
+                text.setText("Trailer " + (i + 1));
+
+                final Uri youtubeUrl = Uri.parse(youtubeBaseVideoUrl +
+                        revsAndTrailsForThisMovie.getTrailers().get(i));
+
+                // Setup trailers so each points to the corresponding Youtube link
+                trailerView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent videoIntent =new Intent(Intent.ACTION_VIEW);
+                        videoIntent.setData(youtubeUrl);
+
+                        if (videoIntent.resolveActivity(mContext.getPackageManager()) != null) {
+                            mContext.startActivity(videoIntent);
+                        } else {
+                            Log.d(LOG_TAG, "Couldn't call " + youtubeUrl + ", no receiving apps installed!");
+                        }
+
+                    }
+                });
+
+                insertPoint.addView(trailerView, i, new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+            }
+        }
+
+        // Add reviews if we have any
         if (revsAndTrailsForThisMovie.hasReviews()){
 
             LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             List<List<String>> allReviews = revsAndTrailsForThisMovie.getReviews();
+
+            TextView reviewHeader = (TextView) mRootView.findViewById(R.id.reviews_header);
+            reviewHeader.setText(mContext.getString(R.string.reviews_header));
+
+            ViewGroup insertPoint = (ViewGroup) mRootView.findViewById(R.id.reviews_container);
 
             for (int i = 0; i < revsAndTrailsForThisMovie.reviewsSize(); i++) {
 
@@ -115,14 +184,11 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
                 review.setText(allReviews.get(i).get(0));
                 reviewer.setText("-" + allReviews.get(i).get(1));
 
-                ViewGroup insertPoint = (ViewGroup) mRootView.findViewById(R.id.reviews_layout);
-                insertPoint.addView(reviewView, 0, new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
+                insertPoint.addView(reviewView, i, new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
             }
-
         }
-        //mReviewAdapter.notifyDataSetChanged();
     }
 
 /**
@@ -167,7 +233,6 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
         final String TRAILER_KEY = "key";
         final String SITE_KEY = "site";
         final String TYPE_KEY = "type";
-        String youtubeBaseUrl = "https://www.youtube.com/watch?v=";
 
         JSONObject movieJson = new JSONObject(urlReturns);
         JSONArray resultsArray = movieJson.getJSONArray(NODE_RESULTS);
@@ -182,8 +247,7 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
 
             if(type.equals("Trailer")){
                 if(site.equals("YouTube")){
-                    String returnUrl = youtubeBaseUrl + trailerKey;
-                    trailers.add(returnUrl);
+                    trailers.add(trailerKey);
                 }
             }
 
@@ -201,6 +265,7 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
             reviews = revs;
             trailers = trails;
         }
+
 
         public List<List<String>> getReviews() {
             return reviews;
@@ -228,6 +293,10 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
 
         public void setTrailers(List<String> trailers) {
             this.trailers = trailers;
+        }
+
+        public int trailerSize(){
+            return trailers.size();
         }
 
         public boolean hasTrailers() {
