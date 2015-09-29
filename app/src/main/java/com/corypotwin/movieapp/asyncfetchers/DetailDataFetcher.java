@@ -12,6 +12,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.corypotwin.movieapp.R;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -130,7 +132,9 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
 
                 Picasso.with(mContext).
                         load(imageUrl).
-                        placeholder(R.drawable.no_image_available_white).
+                        memoryPolicy(MemoryPolicy.NO_CACHE).
+                        networkPolicy(NetworkPolicy.NO_CACHE).
+                        placeholder(R.drawable.no_image_available_black).
                         error(R.drawable.no_image_available_black).
                         into(image);
 
