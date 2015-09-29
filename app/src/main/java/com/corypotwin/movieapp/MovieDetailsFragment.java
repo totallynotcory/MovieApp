@@ -5,16 +5,20 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
+import com.corypotwin.movieapp.asyncfetchers.DetailDataFetcher;
 import com.corypotwin.movieapp.favdata.FavoriteMovieContract;
 import com.squareup.picasso.Picasso;
 
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 /**
@@ -22,6 +26,7 @@ import java.util.ArrayList;
  */
 public class MovieDetailsFragment extends Fragment {
 
+    private final String LOG_TAG = "Movie Details Fragment";
     private Movie movieDetailsInHere;
     private String movieTitle;
 
@@ -35,18 +40,30 @@ public class MovieDetailsFragment extends Fragment {
 
         Bundle args = getArguments();
         if(args != null){
-            movieDetailsInHere = args.getParcelable("MOVIE");
+            movieDetailsInHere = args.getParcelable(MainActivity.INDIVIDUAL_MOVIE_TAG);
+
+            updateReviewsAndTrailers(rootView);
+            populateDetailChildViews(rootView);
         } else {
-            Intent intent = getActivity().getIntent();
-            if (intent != null && intent.hasExtra(Intent.EXTRA_TEXT)) {
-                movieDetailsInHere = intent.getParcelableExtra(Intent.EXTRA_TEXT);
-            } else {
-                return null;
-            }
+           return null;
         }
 
-        populateDetailChildViews(rootView);
         return rootView;
+
+    }
+
+    public void updateReviewsAndTrailers(View rootView) {
+        try {
+        DetailDataFetcher ddFetcher = new DetailDataFetcher(
+                movieDetailsInHere.getmId(),
+                movieDetailsInHere.getmReviews(),
+                movieDetailsInHere.getmTrailerUrl(),
+                getActivity(),
+                rootView);
+        ddFetcher.execute();
+        } catch(MalformedURLException e){
+            Log.e(LOG_TAG, "updateReviewsAndTrailers ");
+        }
 
     }
 
@@ -97,6 +114,7 @@ public class MovieDetailsFragment extends Fragment {
                 .placeholder(R.drawable.no_image_available_black)
                 .error(R.drawable.no_image_available_black)
                 .into(imgView);
+
 
 /*        // Favorite
         RatingBar favoriteStar = (RatingBar) rootView.findViewById(R.id.favorite_star);

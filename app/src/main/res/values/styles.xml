@@ -2,7 +2,15 @@
 
     <!-- Base application theme. Looks good to me-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-
     </style>
 
+    <style name="SettingsTheme" parent="AppTheme">
+        <item name="android:actionBarStyle">@style/ActionBar.V14.Sunshine.NoTitle</item>
+    </style>
+
+
+    <style name="ActionBar.V14.Sunshine.NoTitle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+                <item name="android:background">#000000</item>
+                <item name="android:height">56dp</item>
+            </style>
 </resources>

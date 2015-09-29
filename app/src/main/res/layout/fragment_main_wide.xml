@@ -1,0 +1,29 @@
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivityFragment">
+
+<GridView
+    android:id="@+id/movie_poster_grid"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:verticalSpacing="0dp"
+    android:horizontalSpacing="0dp"
+    android:numColumns="3"
+    android:stretchMode="columnWidth"
+    android:background="#000000"
+    android:choiceMode="singleChoice"
+    />
+
+<TextView
+android:layout_width="wrap_content"
+android:layout_height="wrap_content"
+android:id="@+id/no_connection"
+android:textSize="24sp"
+android:padding="16dp"
+android:textColor="#FFFFFF"
+    />
+
+    </FrameLayout>
+

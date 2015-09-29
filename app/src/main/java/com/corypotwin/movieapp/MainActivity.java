@@ -11,9 +11,12 @@ import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
 
+    // TODO add a color file to the values and redo stuff in touch_selector
+
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
     private boolean mTwoPane;
     private String sortBySetting;
+    public static final String INDIVIDUAL_MOVIE_TAG = "Movie Details";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         setContentView(R.layout.activity_main);
         sortBySetting = PreferenceManager.getDefaultSharedPreferences(this).getString(
                 getString(R.string.pref_sort_by_key),
-                getString(R.string.pref_sort_by_default));;
+                getString(R.string.pref_sort_by_default));
 
         if (findViewById(R.id.detail_fragment) != null) {
             // The detail container view will be present only in the large-screen layouts
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         forecastFragment.setUseTodayLayout(!mTwoPane);*/
     }
 
+/*
 
     @Override
     protected void onResume() {
@@ -66,12 +70,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             }
             MovieDetailsFragment mdf = (MovieDetailsFragment) getSupportFragmentManager()
                     .findFragmentByTag(DETAILFRAGMENT_TAG);
+*/
+/*          This code was originally intended to reset the details after the preferences changed.
+            I'm not sure I need to do that and it's messy. lawlz.
             if ( null != mdf ) {
                 onItemSelected(mf.getmImageAdapter().getFullSingleMovieDetails(0));
-            }
+            }*//*
+
         }
     }
 
+*/
 
 
     /*
@@ -96,7 +105,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             // adding or replacing the detail fragment using a
             // fragment transaction.
             Bundle args = new Bundle();
-            args.putParcelable("MOVIE", singleMovieDetails);
+            args.putParcelable(INDIVIDUAL_MOVIE_TAG, singleMovieDetails);
 
             MovieDetailsFragment fragment = new MovieDetailsFragment();
             fragment.setArguments(args);

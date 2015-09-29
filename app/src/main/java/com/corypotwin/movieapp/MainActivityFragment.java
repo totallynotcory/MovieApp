@@ -2,6 +2,7 @@ package com.corypotwin.movieapp;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -29,9 +30,25 @@ public class MainActivityFragment extends Fragment {
     }
 
     private ImageAdapter mImageAdapter;
+    private GridView mGridView;
     private String sortBySetting;
 
+    private final String POSITION = "position";
+    private int mPosition;
+
     public MainActivityFragment() {
+    }
+
+/*    @Override
+    public void onSaveInstanceState(Bundle outState){
+        super.onSaveInstanceState(outState);
+        outState.putInt(POSITION, mPosition);
+    }*/
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfiguration){
+        super.onConfigurationChanged(newConfiguration);
+        mGridView.smoothScrollToPosition(mPosition);
     }
 
     @Override
@@ -59,6 +76,10 @@ public class MainActivityFragment extends Fragment {
         super.onCreate(savedInstanceState);
         //  This allows the Fragment to affect the menu
         setHasOptionsMenu(true);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(POSITION)) {
+            mPosition = savedInstanceState.getInt(POSITION);
+        }
     }
 
     @Override
@@ -92,13 +113,14 @@ public class MainActivityFragment extends Fragment {
 
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        GridView gridview = (GridView) rootView.findViewById(R.id.movie_poster_grid);
+        mGridView = (GridView) rootView.findViewById(R.id.movie_poster_grid);
         mImageAdapter = new ImageAdapter(getActivity());
-        gridview.setAdapter(mImageAdapter);
+        mGridView.setAdapter(mImageAdapter);
 
         // On clicking a movie, send data over to the new intent.
-        gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                mPosition = position;
                 Movie singleMovieDetails = mImageAdapter.getFullSingleMovieDetails(position);
                 ((Callback) getActivity()).onItemSelected(singleMovieDetails);
             }

@@ -1,15 +1,13 @@
 package com.corypotwin.movieapp.asyncfetchers;
 
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.corypotwin.movieapp.Movie;
 import com.corypotwin.movieapp.R;
 
 import org.json.JSONArray;
@@ -17,28 +15,23 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.List;
 
 /**
  * Used to fetch data for the detail fragment - specifically Youtube URLs and Review text
  */
-public class DetailDataFetcher extends AsyncTask<Void, Void, Void> {
+public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
 
     private final String LOG_TAG = "DetailDataFetcher";
 
     private int movieId;
-    private URL reviewUrl;
-    private URL trailerUrl;
+    private String reviewUrl;
+    private String trailerUrl;
     private Context mContext;
     private View mRootView;
 
@@ -47,74 +40,90 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Void> {
     public DetailDataFetcher(int id, String rUrl, String tUrl, Context context, View rootView)
             throws MalformedURLException{
         movieId = id;
-        reviewUrl = new URL(rUrl);
-        trailerUrl = new URL(tUrl);
+        reviewUrl = rUrl;
+        trailerUrl = tUrl;
         mContext = context;
         mRootView = rootView;
     }
 
-    protected Void doInBackground(Void... params) {
+    protected Integer doInBackground(Void... params) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
 
-        String reviewJsonStr;
-        String trailerJsonStr;
+        String reviewJsonStr = "";
+        String trailerJsonStr = "";
 
         List<List<String>> reviews = new ArrayList<>();
         List<String> trailers = new ArrayList<>();
 
-        // Will contain the raw JSON responses as a strings.
-        UrlConnector reviewConnection = new UrlConnector(reviewUrl, LOG_TAG);
-        if (reviewConnection.isNetWorkAvailable(mContext)) {
-            reviewJsonStr = reviewConnection.connectAndGetJson();
-        } else {
-            reviewJsonStr = "error";
+        try {
+            URL reviewUrlUrl = new URL(reviewUrl);
+            UrlConnector reviewConnection = new UrlConnector(reviewUrlUrl, LOG_TAG);
+            if (reviewConnection.isNetWorkAvailable(mContext)) {
+                reviewJsonStr = reviewConnection.connectAndGetJson();
+            }
+        } catch(MalformedURLException e){
+            Log.e(LOG_TAG, "Error when creating URL");
         }
 
-        UrlConnector trailerConnection = new UrlConnector(trailerUrl, LOG_TAG);
-        if (trailerConnection.isNetWorkAvailable(mContext)) {
-            trailerJsonStr = trailerConnection.connectAndGetJson();
-        } else {
-            trailerJsonStr = "error";
+        try {
+            URL trailerUrlUrl = new URL(reviewUrl);
+            UrlConnector trailerConnection = new UrlConnector(trailerUrlUrl, LOG_TAG);
+            if (trailerConnection.isNetWorkAvailable(mContext)) {
+                trailerJsonStr = trailerConnection.connectAndGetJson();
+            }
+        }    catch(MalformedURLException e){
+                Log.e(LOG_TAG, "Error when creating URL");
         }
+
+
 
         try {
             reviews = getReviewDataFromJson(reviewJsonStr);
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Something went wrong parsing JSON");
+            Log.e(LOG_TAG, "Something went wrong parsing review JSON");
         }
 
 
-        try {
+/*        try {
             trailers = getTrailerDataFromJson(trailerJsonStr);
         } catch (JSONException e) {
-            Log.e(LOG_TAG, "Something went wrong parsing JSON");
-        }
+            Log.e(LOG_TAG, "Something went wrong parsing trailer JSON");
+        }*/
 
         revsAndTrailsForThisMovie = new ReviewsAndTrailers(reviews, trailers);
+        return 1;
 
-        return null;
     }
 
-/*
-    protected void onPostExecute(List<Movie> movieResults){
+    protected void onPostExecute(Integer one){
 
-        if (revsAndTrailsForThisMovie.getReviews()){
+        if (revsAndTrailsForThisMovie.hasReviews()){
 
-            for (int i = 0; i < movieResults.size(); i++) {
+            LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            List<List<String>> allReviews = revsAndTrailsForThisMovie.getReviews();
+
+            for (int i = 0; i < revsAndTrailsForThisMovie.reviewsSize(); i++) {
+
+                View reviewView = vi.inflate(R.layout.review_item, null);
+
+                TextView review = (TextView) reviewView.findViewById(R.id.review_body);
+                TextView reviewer = (TextView) reviewView.findViewById(R.id.reviewer_name);
+
+                review.setText(allReviews.get(i).get(0));
+                reviewer.setText("-" + allReviews.get(i).get(1));
+
+                ViewGroup insertPoint = (ViewGroup) mRootView.findViewById(R.id.reviews_layout);
+                insertPoint.addView(reviewView, 0, new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.FILL_PARENT));
 
             }
-        }
-
-        if (!revsAndTrailsForThisMovie.getReviews().equals(null)){
 
         }
-        mContext.notifyDataSetChanged();
-*/
-
-//    }
+        //mReviewAdapter.notifyDataSetChanged();
+    }
 
 /**
  * Used by the MovieFetcherClass to parse the Movie Data from the JSON string returned
@@ -201,6 +210,18 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Void> {
             this.reviews = reviews;
         }
 
+        public int reviewsSize(){
+            return reviews.size();
+        }
+
+        public boolean hasReviews() {
+            if(this.getReviews().size() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
+
         public List<String> getTrailers() {
             return trailers;
         }
@@ -209,6 +230,13 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Void> {
             this.trailers = trailers;
         }
 
+        public boolean hasTrailers() {
+            if(this.getTrailers().size() > 0) {
+                return true;
+            } else {
+                return false;
+            }
+        }
 
 
     }
