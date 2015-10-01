@@ -33,7 +33,7 @@ import java.util.List;
 /**
  * Used to fetch data for the detail fragment - specifically Youtube URLs and Review text
  */
-public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
+public class DetailDataFetcher extends AsyncTask<Void, Void, ReviewsAndTrailers> {
 
     private final String LOG_TAG = "DetailDataFetcher";
 
@@ -44,7 +44,8 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
     private View mRootView;
     private MovieDetailsFragment mMdf;
 
-    private ReviewsAndTrailers revsAndTrailsForThisMovie;
+    private String youtubeBaseVideoUrl = "https://www.youtube.com/watch?v=";
+    private String youtubeBaseJpgUrl = "http://img.youtube.com/vi/";
 
     public DetailDataFetcher(int id, String rUrl, String tUrl, Context context, View rootView,
                              MovieDetailsFragment mdf)
@@ -57,7 +58,12 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
         mMdf = mdf;
     }
 
-    protected Boolean doInBackground(Void... params) {
+    /**
+     * Retrieve data from the movie db about the trailers and reviews.
+     * @param params Always void
+     * @return Reviews and Trailers stored in a custom class
+     */
+    protected ReviewsAndTrailers doInBackground(Void... params) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -69,6 +75,7 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
         List<List<String>> reviews = new ArrayList<>();
         List<String> trailers = new ArrayList<>();
 
+        // Retrieve JSON for Reviews
         try {
             URL reviewUrlUrl = new URL(reviewUrl);
             UrlConnector reviewConnection = new UrlConnector(reviewUrlUrl, LOG_TAG);
@@ -79,6 +86,7 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
             Log.e(LOG_TAG, "Error when creating URL");
         }
 
+        // Retrieve JSON for Trailers
         try {
             URL trailerUrlUrl = new URL(trailerUrl);
             UrlConnector trailerConnection = new UrlConnector(trailerUrlUrl, LOG_TAG);
@@ -89,35 +97,36 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
                 Log.e(LOG_TAG, "Error when creating URL");
         }
 
-
-
+        // Parse JSON for Reviews
         try {
             reviews = getReviewDataFromJson(reviewJsonStr);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Something went wrong parsing review JSON");
         }
 
-
+        // Parse JSON for trailers
         try {
             trailers = getTrailerDataFromJson(trailerJsonStr);
         } catch (JSONException e) {
             Log.e(LOG_TAG, "Something went wrong parsing trailer JSON");
         }
 
-        revsAndTrailsForThisMovie = new ReviewsAndTrailers(reviews, trailers);
-        return true;
-
+        return new ReviewsAndTrailers(reviews, trailers);
     }
 
-    protected void onPostExecute(Boolean thingsWentWellFlag){
+    /**
+     * Adds Reviers and Trailers found during the AsyncTask to the current view.
+     * There will be a slighty delay before their added, and the user may see a "No Image Available"
+     * for the Trailer.
+     * @param revsAndTrailsForThisMovie Trailers and Movies for this movie. Check inner class for
+     *                                  structure details.
+     */
+    protected void onPostExecute(ReviewsAndTrailers revsAndTrailsForThisMovie){
 
         mMdf.setmRevsAndTrails(revsAndTrailsForThisMovie);
 
-        // Add trailers if we've got any
+        // Add trailers to the detail review if any exist.
         if (revsAndTrailsForThisMovie.hasTrailers()){
-
-            String youtubeBaseVideoUrl = "https://www.youtube.com/watch?v=";
-            String youtubeBaseJpgUrl = "http://img.youtube.com/vi/";
 
             LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             List<String> allTrailers = revsAndTrailsForThisMovie.getTrailers();
@@ -145,7 +154,6 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
                         error(R.drawable.no_image_available_black).
                         into(image);
 
-                image.setImageResource(R.drawable.no_image_available_black);
                 text.setText("Trailer " + (i + 1));
 
                 final Uri youtubeUrl = Uri.parse(youtubeBaseVideoUrl +
@@ -164,7 +172,6 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
                         } else {
                             Log.d(LOG_TAG, "Couldn't call " + youtubeUrl + ", no receiving apps installed!");
                         }
-
                     }
                 });
 
@@ -174,7 +181,7 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
             }
         }
 
-        // Add reviews if we have any
+        // Add reviews to the detail view if any exist
         if (revsAndTrailsForThisMovie.hasReviews()){
 
             LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -200,20 +207,17 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
 
             }
         }
-
-
     }
 
-/**
- * Used by the MovieFetcherClass to parse the Movie Data from the JSON string returned
- * from the database
- *
- * @param urlReturns - JSON string returned from themovedb
- * @return - A list of lists, each inner list containing 5 strings (title, description, rating,
- *  release date, poster image)
- * @throws JSONException
- * */
-
+    /**
+     * Parses the Review Data from the JSON string returned in the DetailDataFetcher
+     * from the database
+     *
+     * @param urlReturns - JSON string returned from themovedb of review data
+     * @return - A list of lists, each inner list containing the details of one review, a review and
+     * its author.
+     * @throws JSONException
+     * */
     private List<List<String>> getReviewDataFromJson(String urlReturns) throws JSONException {
 
         List<List<String>> reviews = new ArrayList<>();
@@ -238,6 +242,14 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
         return reviews;
     }
 
+    /**
+     * Parses the Trailer Data from the JSON string returned in the DetailDataFetcher
+     * from the database
+     *
+     * @param urlReturns - JSON string returned from themovedb of trailer data
+     * @return - A list containing the youtube identifier.
+     * @throws JSONException
+     * */
     private List<String> getTrailerDataFromJson(String urlReturns) throws JSONException {
 
         List<String> trailers = new ArrayList<>();

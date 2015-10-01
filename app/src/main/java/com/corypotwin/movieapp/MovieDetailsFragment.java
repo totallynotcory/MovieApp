@@ -37,13 +37,9 @@ import java.util.List;
 public class MovieDetailsFragment extends Fragment {
 
     private final String LOG_TAG = "Movie Details Fragment";
+    // Stores details of movie to show in this fragment
     private Movie movieDetails;
-    private String movieTitle;
-
-    public void setmRevsAndTrails(ReviewsAndTrailers mRevsAndTrails) {
-        this.mRevsAndTrails = mRevsAndTrails;
-    }
-
+    // Used after the async task is done to return the Trailers + Reviews for current movie.
     private ReviewsAndTrailers mRevsAndTrails;
 
 
@@ -69,6 +65,15 @@ public class MovieDetailsFragment extends Fragment {
 
     }
 
+    public void setmRevsAndTrails(ReviewsAndTrailers mRevsAndTrails) {
+        this.mRevsAndTrails = mRevsAndTrails;
+    }
+
+    /**
+     * Launches an async task to retrieve Trailers and Reviews from the server.
+     *
+     * @param rootView - Fragment View used to find appropriate children views
+     */
     public void updateReviewsAndTrailers(View rootView) {
         try {
         DetailDataFetcher ddFetcher = new DetailDataFetcher(
@@ -80,7 +85,7 @@ public class MovieDetailsFragment extends Fragment {
                 this);
         ddFetcher.execute();
         } catch(MalformedURLException e){
-            Log.e(LOG_TAG, "updateReviewsAndTrailers ");
+            Log.e(LOG_TAG, "updateReviewsAndTrailers had a malformed URL");
         }
 
     }
@@ -93,8 +98,7 @@ public class MovieDetailsFragment extends Fragment {
     private void populateDetailChildViews(View rootView){
 
         // Title
-        movieTitle = movieDetails.getmTitle();
-        ((TextView) rootView.findViewById(R.id.title)).setText(movieTitle);
+        ((TextView) rootView.findViewById(R.id.title)).setText(movieDetails.getmTitle());
 
         // Description
         if(movieDetails.getmDescription() == null){
@@ -137,28 +141,10 @@ public class MovieDetailsFragment extends Fragment {
         CheckBox favoriteMovieCheckBox = (CheckBox) rootView.findViewById(R.id.favorite_checkbox);
         boolean favorite = movieInTables();
         favoriteMovieCheckBox.setChecked(favorite);
-
-
-/*        // Favorite
-        RatingBar favoriteStar = (RatingBar) rootView.findViewById(R.id.favorite_star);
-        if(setFavorite()){
-            favoriteStar.setRating(1);
-        }*/
+        if (favorite) {
+            favoriteMovieCheckBox.setText(R.string.favorite);
+        }
     }
-
-    public boolean setFavorite(){
-        String[] selectionArgs = {movieTitle};
-
-        Cursor favoriteMovie = getActivity().getContentResolver()
-                .query(FavoriteMovieContract.FavoriteMovieEntry.CONTENT_URI,
-                        null,
-                        FavoriteMovieContract.FavoriteMovieEntry.COLUMN_TITLE,
-                        selectionArgs,
-                        null);
-
-        return favoriteMovie.moveToNext();
-    }
-
 
     private boolean movieInTables() {
         FavoritesSelection where = new FavoritesSelection();
@@ -178,23 +164,28 @@ public class MovieDetailsFragment extends Fragment {
 
     public void favoriteClick(View v){
 
+        CheckBox favoriteBox = (CheckBox) v;
         // Is the view now checked?
-        boolean checkBoxIsChecked = ((CheckBox) v).isChecked();
+        boolean checkBoxIsChecked = favoriteBox.isChecked();
         // Is the move in the table already?
         boolean movieExistsInTable = movieInTables();
 
         if (checkBoxIsChecked) {
+            favoriteBox.setText(R.string.favorite);
             if (!movieExistsInTable) {
                 addToFavoritesTables();
             }
         } else {
+            favoriteBox.setText(R.string.not_favorite);
             if (movieExistsInTable) {
                 removeFromFavoritesTables();
             }
         }
     }
 
-
+    /**
+     * Inserts Favorite Movies into the Favorite Moves database
+     */
     private void addToFavoritesTables(){
         FavoritesContentValues movieDetailsToSave = new FavoritesContentValues();
         movieDetailsToSave.putDbId(movieDetails.getmId())
@@ -207,8 +198,7 @@ public class MovieDetailsFragment extends Fragment {
         getActivity().getContentResolver().insert(movieDetailsToSave.uri(),
                 movieDetailsToSave.values());
 
-        if(mRevsAndTrails.hasReviews()) {
-
+/*        if(mRevsAndTrails.hasReviews()) {
             for (int i = 0; i < mRevsAndTrails.reviewsSize(); i++) {
                 ReviewsContentValues reviewDetailsToSave = new ReviewsContentValues();
                 reviewDetailsToSave.putMovieId(movieDetails.getmId())
@@ -220,8 +210,6 @@ public class MovieDetailsFragment extends Fragment {
                 getActivity().getContentResolver().insert(ReviewsColumns.CONTENT_URI,
                         reviewDetailsToSave.values());
             }
-
-
         }
 
         if(mRevsAndTrails.hasTrailers()){
@@ -233,9 +221,12 @@ public class MovieDetailsFragment extends Fragment {
                 getActivity().getContentResolver().insert(trailersDetailsToSave.uri(),
                         trailersDetailsToSave.values());
             }
-        }
+        }*/
     }
 
+    /**
+     * Removes movie from the Favorites table
+     */
     private void removeFromFavoritesTables(){
         FavoritesSelection where = new FavoritesSelection();
         where.dbId(movieDetails.getmId());

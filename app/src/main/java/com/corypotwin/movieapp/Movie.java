@@ -8,7 +8,7 @@ import android.os.Parcelable;
  */
 public class Movie implements Parcelable{
 
-    // ids returned are currently 6 digits long, seems ok for an int.
+    // ids returned from the movie db are currently 6 digits long, seems ok for an int.
     // If 1.9+ billion more movies are released, please change this to a long.
     private int mId;
 
@@ -30,6 +30,8 @@ public class Movie implements Parcelable{
         mReleaseDate = releaseDate;
         mPosterUrl = posterUrl;
     }
+
+    // This is the necessary bits for making a parcelable.  Yeehaw!
 
     public static final Parcelable.Creator<Movie> CREATOR
             = new Parcelable.Creator<Movie>() {
@@ -67,6 +69,8 @@ public class Movie implements Parcelable{
         mTrailerUrl = in.readString();
         mReviews = in.readString();
     }
+
+    // It's your setters and getters from here on out kid.  Pretty predicatable stuff
 
     public int getmId() {
         return mId;

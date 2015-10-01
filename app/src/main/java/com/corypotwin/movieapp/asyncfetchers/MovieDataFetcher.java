@@ -44,6 +44,8 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
     private final String mSortBy;
     private final Activity mActivity;
 
+    //  TODO for future versions, it might be necessary to change the width of the imported images
+
     private String screenSize = "w185";
 
     public MovieDataFetcher(Context context, Activity activity,
@@ -59,22 +61,19 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
 
     final String MOVIE_BASE_URL = "http://api.themoviedb.org/3";
     final String USER_KEY_PARAM = "api_key";
+
     // SecretKeyFile contains the API key for TheMovieDB.  This file has been added to the
     // .gitignore file.
     String secretKey = SecretKeyFile.getKey();
 
     protected List<Movie> doInBackground(Void... params) {
 
-        //  I feel like initiating this as "" is kind of a bad practice...
-        // TODO figure out: is this a bad idea?
         String movieJsonStr = "";
         URL url;
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
-
-        // Will contain the raw JSON response as a string.
 
         String currentDate = new SimpleDateFormat("y").format(new Date());
 
@@ -194,10 +193,4 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
         return movieData;
     }
 
-    private boolean isNetWorkAvailable() {
-        ConnectivityManager connectivityManager =
-                (ConnectivityManager) mContext.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting();
-    }
 }

@@ -16,6 +16,8 @@ import java.net.URL;
 
 /**
  * Created by ctpotwin on 9/26/15.
+ *
+ * Creates a URL connection to the input URL.  Logs to the input LOG_TAG.
  */
 public class UrlConnector {
 
@@ -35,7 +37,7 @@ public class UrlConnector {
         BufferedReader reader = null;
 
         try {
-            // Create the request to Movie API for the reviews, and open the connection
+            // Create the request to Movie API, and open the connection
             urlConnection = (HttpURLConnection) mUrl.openConnection();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
@@ -61,7 +63,7 @@ public class UrlConnector {
             returnJsonStr = buffer.toString();
         } catch (IOException e) {
             Log.e(LOG_TAG, "Error Connecting", e);
-            // If the code didn't successfully get the movie data, there's no point in attempting
+            // If the code didn't successfully get the data, there's no point in attempting
             // to parse it.
             return null;
         } finally {

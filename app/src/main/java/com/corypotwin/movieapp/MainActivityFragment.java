@@ -26,8 +26,6 @@ import com.corypotwin.movieapp.provider.favorites.FavoritesSelection;
  */
 public class MainActivityFragment extends Fragment {
 
-    //  TODO for future versions, it might be necessary to change the width of the imported images
-
     public ImageAdapter getmImageAdapter() {
         return mImageAdapter;
     }
@@ -41,12 +39,6 @@ public class MainActivityFragment extends Fragment {
 
     public MainActivityFragment() {
     }
-
-/*    @Override
-    public void onSaveInstanceState(Bundle outState){
-        super.onSaveInstanceState(outState);
-        outState.putInt(POSITION, mPosition);
-    }*/
 
     @Override
     public void onConfigurationChanged(Configuration newConfiguration){
@@ -144,6 +136,10 @@ public class MainActivityFragment extends Fragment {
         }
     }
 
+    /**
+     * Retrieves favorite move data from the favorites.db to insert into the ImageAdapter used in
+     * the main fragment
+     */
     private void insertFavoriteMovies(){
 
         FavoritesSelection where = new FavoritesSelection();
@@ -151,9 +147,7 @@ public class MainActivityFragment extends Fragment {
                 null, null, null);
 
         if (c.moveToFirst()){
-
             mImageAdapter.clear();
-
             do{
                 Movie aFavoriteMovie = new Movie(
                         c.getInt(c.getColumnIndex(FavoritesColumns.DB_ID)),
@@ -170,7 +164,6 @@ public class MainActivityFragment extends Fragment {
             mImageAdapter.clear();
         }
         mImageAdapter.notifyDataSetChanged();
-
     }
 
 
@@ -178,7 +171,6 @@ public class MainActivityFragment extends Fragment {
      * For any Activity that includes this Fragment, they must define behavior for this Callback
      * Otherwise, nothing will happen when a Movie is clicked
      */
-
     public interface Callback {
         public void onItemSelected(Movie singleMovieDetails);
         }

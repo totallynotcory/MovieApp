@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
 
@@ -17,6 +18,7 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
     private boolean mTwoPane;
     private String sortBySetting;
     public static final String INDIVIDUAL_MOVIE_TAG = "Movie Details";
+    private MovieDetailsFragment mDetailsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,60 +45,16 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             mTwoPane = false;
         }
 
-/*        ForecastFragment forecastFragment =  ((ForecastFragment)getSupportFragmentManager()
-                .findFragmentById(R.id.fragment_main));
-        forecastFragment.setUseTodayLayout(!mTwoPane);*/
     }
 
-/*
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Grab the sortBy preference
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        String sortBy = prefs.getString(
-                getString(R.string.pref_sort_by_key),
-                getString(R.string.pref_sort_by_default));
-
-        // If the previous sortBy preference does not match the current preference,
-        // we need to refresh. This include the initial load as well.
-        if(!sortBy.equals(sortBySetting)){
-            sortBySetting = sortBy;
-            MainActivityFragment mf = (MainActivityFragment) getSupportFragmentManager()
-                    .findFragmentById(R.id.main_fragment);
-            if( null != mf ) {
-                mf.refreshMovieData();
-            }
-            MovieDetailsFragment mdf = (MovieDetailsFragment) getSupportFragmentManager()
-                    .findFragmentByTag(DETAILFRAGMENT_TAG);
-*/
-/*          This code was originally intended to reset the details after the preferences changed.
-            I'm not sure I need to do that and it's messy. lawlz.
-            if ( null != mdf ) {
-                onItemSelected(mf.getmImageAdapter().getFullSingleMovieDetails(0));
-            }*//*
-
-        }
-    }
-
-*/
-
-
-    /*
-    Fragmentmanager fm = getFragmentManager();
-
-    Fragment fragB = new DetailsFragment();
-    int containerID = R.id.fragment_container;
-    String tag = null;
-
-    FragmentTransaction ft = fm.beginTransaction();
-    ft.replace(containerID, fragB);
-    ft.addToBackStack(tag);
-    ft.commit();
+    /**
+     * In the case of a two pane layout, this will take care of the behavior of the favorite button
+     * on the details pane
+     * @param v clicked view
      */
-
-
+    public void favoriteClick(View v){
+        mDetailsFragment.favoriteClick(v);
+    }
 
     @Override
     public void onItemSelected(Movie singleMovieDetails) {
@@ -107,11 +65,11 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
             Bundle args = new Bundle();
             args.putParcelable(INDIVIDUAL_MOVIE_TAG, singleMovieDetails);
 
-            MovieDetailsFragment fragment = new MovieDetailsFragment();
-            fragment.setArguments(args);
+            mDetailsFragment = new MovieDetailsFragment();
+            mDetailsFragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.detail_fragment, fragment, DETAILFRAGMENT_TAG)
+                    .replace(R.id.detail_fragment, mDetailsFragment, DETAILFRAGMENT_TAG)
                     .commit();
         } else {
             Intent intent = new Intent(this, MovieDetails.class)

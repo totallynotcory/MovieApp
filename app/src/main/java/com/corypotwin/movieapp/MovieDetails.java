@@ -1,17 +1,15 @@
 package com.corypotwin.movieapp;
 
 import android.content.Intent;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.RatingBar;
 
 public class MovieDetails extends AppCompatActivity {
 
-    private MovieDetailsFragment mFragment;
+    private MovieDetailsFragment mDetailFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,13 +21,12 @@ public class MovieDetails extends AppCompatActivity {
             args.putParcelable(MainActivity.INDIVIDUAL_MOVIE_TAG,
                     getIntent().getParcelableExtra(Intent.EXTRA_TEXT));
 
-            mFragment = new MovieDetailsFragment();
-            mFragment.setArguments(args);
+            mDetailFragment = new MovieDetailsFragment();
+            mDetailFragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.detail_fragment, mFragment)
+                    .add(R.id.detail_fragment, mDetailFragment)
                     .commit();
-
 
         }
     }
@@ -59,7 +56,7 @@ public class MovieDetails extends AppCompatActivity {
     }
 
     public void favoriteClick(View v){
-        mFragment.favoriteClick(v);
+        mDetailFragment.favoriteClick(v);
     }
 
 }

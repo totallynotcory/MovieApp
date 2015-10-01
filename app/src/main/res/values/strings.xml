@@ -17,5 +17,5 @@
     <string name="reviews_header">Reviews: </string>
 
     <string name="not_favorite">Favorite?</string>
-    <string name="favorite">Nice choice!</string>
+    <string name="favorite">Favorited!</string>
 </resources>

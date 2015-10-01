@@ -16,7 +16,7 @@ public class ReviewsAndTrailers {
         trailers = trails;
     }
 
-
+    // Review Related Functions
     public List<List<String>> getReviews() {
         return reviews;
     }
@@ -37,6 +37,7 @@ public class ReviewsAndTrailers {
         }
     }
 
+    // Trailer related functions
     public List<String> getTrailers() {
         return trailers;
     }
