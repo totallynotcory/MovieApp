@@ -184,7 +184,9 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
 
 
             Movie thisMovie = new Movie(id, title, description, rating,
-                    releaseDate, imageUrl, trailerUrl, reviewsUrl);
+                    releaseDate, imageUrl);
+            thisMovie.setmReviews(reviewsUrl);
+            thisMovie.setmTrailerUrl(trailerUrl);
 
             movieData.add(thisMovie);
         }

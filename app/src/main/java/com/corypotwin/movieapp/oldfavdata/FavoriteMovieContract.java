@@ -1,4 +1,4 @@
-package com.corypotwin.movieapp.favdata;
+package com.corypotwin.movieapp.oldfavdata;
 
 import android.content.ContentResolver;
 import android.content.ContentUris;

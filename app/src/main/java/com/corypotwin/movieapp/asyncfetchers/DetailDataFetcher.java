@@ -11,7 +11,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.corypotwin.movieapp.MovieDetailsFragment;
 import com.corypotwin.movieapp.R;
+import com.corypotwin.movieapp.ReviewsAndTrailers;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -31,7 +33,7 @@ import java.util.List;
 /**
  * Used to fetch data for the detail fragment - specifically Youtube URLs and Review text
  */
-public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
+public class DetailDataFetcher extends AsyncTask<Void, Void, Boolean> {
 
     private final String LOG_TAG = "DetailDataFetcher";
 
@@ -40,19 +42,22 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
     private String trailerUrl;
     private Context mContext;
     private View mRootView;
+    private MovieDetailsFragment mMdf;
 
     private ReviewsAndTrailers revsAndTrailsForThisMovie;
 
-    public DetailDataFetcher(int id, String rUrl, String tUrl, Context context, View rootView)
+    public DetailDataFetcher(int id, String rUrl, String tUrl, Context context, View rootView,
+                             MovieDetailsFragment mdf)
             throws MalformedURLException{
         movieId = id;
         reviewUrl = rUrl;
         trailerUrl = tUrl;
         mContext = context;
         mRootView = rootView;
+        mMdf = mdf;
     }
 
-    protected Integer doInBackground(Void... params) {
+    protected Boolean doInBackground(Void... params) {
         // These two need to be declared outside the try/catch
         // so that they can be closed in the finally block.
         HttpURLConnection urlConnection = null;
@@ -100,11 +105,13 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
         }
 
         revsAndTrailsForThisMovie = new ReviewsAndTrailers(reviews, trailers);
-        return 1;
+        return true;
 
     }
 
-    protected void onPostExecute(Integer one){
+    protected void onPostExecute(Boolean thingsWentWellFlag){
+
+        mMdf.setmRevsAndTrails(revsAndTrailsForThisMovie);
 
         // Add trailers if we've got any
         if (revsAndTrailsForThisMovie.hasTrailers()){
@@ -193,6 +200,8 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
 
             }
         }
+
+
     }
 
 /**
@@ -260,57 +269,4 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, Integer> {
         return trailers;
     }
 
-    final class ReviewsAndTrailers {
-
-        private List<List<String>> reviews;
-        private List<String> trailers;
-
-        public ReviewsAndTrailers(List<List<String>> revs, List<String> trails){
-            reviews = revs;
-            trailers = trails;
-        }
-
-
-        public List<List<String>> getReviews() {
-            return reviews;
-        }
-
-        public void setReviews(List<List<String>> reviews) {
-            this.reviews = reviews;
-        }
-
-        public int reviewsSize(){
-            return reviews.size();
-        }
-
-        public boolean hasReviews() {
-            if(this.getReviews().size() > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-        public List<String> getTrailers() {
-            return trailers;
-        }
-
-        public void setTrailers(List<String> trailers) {
-            this.trailers = trailers;
-        }
-
-        public int trailerSize(){
-            return trailers.size();
-        }
-
-        public boolean hasTrailers() {
-            if(this.getTrailers().size() > 0) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-
-
-    }
 }

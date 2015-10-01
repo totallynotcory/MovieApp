@@ -7,6 +7,8 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
+
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -45,6 +47,11 @@
                 android:value="com.corypotwin.movieapp.MainActivity" />
         </activity>
 
+
+        <provider
+            android:name="com.corypotwin.movieapp.provider.FavoritesProvider"
+            android:authorities="com.corypotwin.movieapp.provider"
+            android:exported="false" />
     </application>
 
 </manifest>

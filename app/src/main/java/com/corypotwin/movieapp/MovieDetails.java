@@ -6,8 +6,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.RatingBar;
 
 public class MovieDetails extends AppCompatActivity {
+
+    private MovieDetailsFragment mFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,12 +23,14 @@ public class MovieDetails extends AppCompatActivity {
             args.putParcelable(MainActivity.INDIVIDUAL_MOVIE_TAG,
                     getIntent().getParcelableExtra(Intent.EXTRA_TEXT));
 
-            MovieDetailsFragment fragment = new MovieDetailsFragment();
-            fragment.setArguments(args);
+            mFragment = new MovieDetailsFragment();
+            mFragment.setArguments(args);
 
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.detail_fragment, fragment)
+                    .add(R.id.detail_fragment, mFragment)
                     .commit();
+
+
         }
     }
 
@@ -51,4 +57,9 @@ public class MovieDetails extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    public void favoriteClick(View v){
+        mFragment.favoriteClick(v);
+    }
+
 }

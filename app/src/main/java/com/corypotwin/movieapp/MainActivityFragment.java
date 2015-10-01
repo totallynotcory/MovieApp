@@ -3,6 +3,7 @@ package com.corypotwin.movieapp;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,8 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.corypotwin.movieapp.asyncfetchers.MovieDataFetcher;
+import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
+import com.corypotwin.movieapp.provider.favorites.FavoritesSelection;
 
 /**
  * A fragment containing the Movie grid view
@@ -132,13 +135,44 @@ public class MainActivityFragment extends Fragment {
      * Refreshes the movie data from the MovieDB API
      */
     public void refreshMovieData() {
-        if(sortBySetting != "favorites") {
+        if(!sortBySetting.equals("favorites")) {
             MovieDataFetcher refresher = new MovieDataFetcher(getActivity(), getActivity(),
                     mImageAdapter, sortBySetting);
             refresher.execute();
+        } else {
+            insertFavoriteMovies();
         }
-        // TODO else { get favorites from DB }
     }
+
+    private void insertFavoriteMovies(){
+
+        FavoritesSelection where = new FavoritesSelection();
+        Cursor c = getActivity().getContentResolver().query(FavoritesColumns.CONTENT_URI, null,
+                null, null, null);
+
+        if (c.moveToFirst()){
+
+            mImageAdapter.clear();
+
+            do{
+                Movie aFavoriteMovie = new Movie(
+                        c.getInt(c.getColumnIndex(FavoritesColumns.DB_ID)),
+                        c.getString(c.getColumnIndex(FavoritesColumns.MOVIE_NAME)),
+                        c.getString(c.getColumnIndex(FavoritesColumns.DESCRIPTION)),
+                        c.getString(c.getColumnIndex(FavoritesColumns.RATING)),
+                        c.getString(c.getColumnIndex(FavoritesColumns.RELEASE_DATE)),
+                        c.getString(c.getColumnIndex(FavoritesColumns.POSTER_URL))
+                );
+                mImageAdapter.add(aFavoriteMovie);
+            } while (c.moveToNext());
+
+        } else {
+            mImageAdapter.clear();
+        }
+        mImageAdapter.notifyDataSetChanged();
+
+    }
+
 
     /**
      * For any Activity that includes this Fragment, they must define behavior for this Callback

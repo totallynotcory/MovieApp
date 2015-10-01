@@ -1,10 +1,10 @@
-package com.corypotwin.movieapp.favdata;
+package com.corypotwin.movieapp.oldfavdata;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import com.corypotwin.movieapp.favdata.FavoriteMovieContract.FavoriteMovieEntry;
+import com.corypotwin.movieapp.oldfavdata.FavoriteMovieContract.FavoriteMovieEntry;
 
 /**
  * Class to construct the favorite movie database for users

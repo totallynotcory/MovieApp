@@ -22,15 +22,13 @@ public class Movie implements Parcelable{
     private String mReviews;
 
     public Movie(int id, String title, String description, String rating, String releaseDate,
-                    String posterUrl, String trailerUrl, String reviews){
+                    String posterUrl){
         mId = id;
         mTitle = title;
         mDescription = description;
         mRating = rating;
         mReleaseDate = releaseDate;
         mPosterUrl = posterUrl;
-        mTrailerUrl = trailerUrl;
-        mReviews = reviews;
     }
 
     public static final Parcelable.Creator<Movie> CREATOR
@@ -133,7 +131,5 @@ public class Movie implements Parcelable{
     public void setmTrailerUrl(String mTrailerUrl) {
         this.mTrailerUrl = mTrailerUrl;
     }
-
-
 
 }
