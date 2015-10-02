@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -21,6 +20,8 @@ import com.corypotwin.movieapp.asyncfetchers.MovieDataFetcher;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
 import com.corypotwin.movieapp.provider.favorites.FavoritesSelection;
 
+import java.util.List;
+
 /**
  * A fragment containing the Movie grid view
  */
@@ -29,6 +30,7 @@ public class MainActivityFragment extends Fragment {
     public ImageAdapter getmImageAdapter() {
         return mImageAdapter;
     }
+    public void setmImageAdapter(ImageAdapter imageAdapter) { mImageAdapter = imageAdapter; }
 
     private ImageAdapter mImageAdapter;
     private GridView mGridView;
@@ -69,18 +71,13 @@ public class MainActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //  This allows the Fragment to affect the menu
-        setHasOptionsMenu(true);
+        setRetainInstance(true);
 
         if (savedInstanceState != null && savedInstanceState.containsKey(POSITION)) {
             mPosition = savedInstanceState.getInt(POSITION);
         }
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_main, menu);
-    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -155,8 +152,10 @@ public class MainActivityFragment extends Fragment {
                         c.getString(c.getColumnIndex(FavoritesColumns.DESCRIPTION)),
                         c.getString(c.getColumnIndex(FavoritesColumns.RATING)),
                         c.getString(c.getColumnIndex(FavoritesColumns.RELEASE_DATE)),
-                        c.getString(c.getColumnIndex(FavoritesColumns.POSTER_URL))
-                );
+                        c.getString(c.getColumnIndex(FavoritesColumns.POSTER_URL)),
+                        c.getString(c.getColumnIndex(FavoritesColumns.REVIEWS_URL)),
+                        c.getString(c.getColumnIndex(FavoritesColumns.TRAILERS_URL))
+                        );
                 mImageAdapter.add(aFavoriteMovie);
             } while (c.moveToNext());
 
@@ -165,7 +164,6 @@ public class MainActivityFragment extends Fragment {
         }
         mImageAdapter.notifyDataSetChanged();
     }
-
 
     /**
      * For any Activity that includes this Fragment, they must define behavior for this Callback

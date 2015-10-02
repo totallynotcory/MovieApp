@@ -11,14 +11,12 @@ import android.util.Log;
 
 import com.corypotwin.movieapp.BuildConfig;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
-import com.corypotwin.movieapp.provider.reviews.ReviewsColumns;
-import com.corypotwin.movieapp.provider.trailers.TrailersColumns;
 
 public class FavoritesSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = FavoritesSQLiteOpenHelper.class.getSimpleName();
 
     public static final String DATABASE_FILE_NAME = "favorites.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     private static FavoritesSQLiteOpenHelper sInstance;
     private final Context mContext;
     private final FavoritesSQLiteOpenHelperCallbacks mOpenHelperCallbacks;
@@ -32,7 +30,9 @@ public class FavoritesSQLiteOpenHelper extends SQLiteOpenHelper {
             + FavoritesColumns.RELEASE_DATE + " TEXT, "
             + FavoritesColumns.RATING + " TEXT, "
             + FavoritesColumns.DESCRIPTION + " TEXT, "
-            + FavoritesColumns.POSTER_URL + " TEXT "
+            + FavoritesColumns.POSTER_URL + " TEXT, "
+            + FavoritesColumns.REVIEWS_URL + " TEXT, "
+            + FavoritesColumns.TRAILERS_URL + " TEXT "
             + ", CONSTRAINT unique_id UNIQUE (db_id) ON CONFLICT REPLACE"
             + " );";
 
@@ -41,23 +41,6 @@ public class FavoritesSQLiteOpenHelper extends SQLiteOpenHelper {
 
     public static final String SQL_CREATE_INDEX_FAVORITES_MOVIE_NAME = "CREATE INDEX IDX_FAVORITES_MOVIE_NAME "
             + " ON " + FavoritesColumns.TABLE_NAME + " ( " + FavoritesColumns.MOVIE_NAME + " );";
-
-    public static final String SQL_CREATE_TABLE_REVIEWS = "CREATE TABLE IF NOT EXISTS "
-            + ReviewsColumns.TABLE_NAME + " ( "
-            + ReviewsColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + ReviewsColumns.MOVIE_ID + " INTEGER NOT NULL, "
-            + ReviewsColumns.REVIEW + " TEXT NOT NULL, "
-            + ReviewsColumns.AUTHOR + " TEXT NOT NULL "
-            + ", CONSTRAINT fk_movie_id FOREIGN KEY (" + ReviewsColumns.MOVIE_ID + ") REFERENCES favorites (_id) ON DELETE CASCADE"
-            + " );";
-
-    public static final String SQL_CREATE_TABLE_TRAILERS = "CREATE TABLE IF NOT EXISTS "
-            + TrailersColumns.TABLE_NAME + " ( "
-            + TrailersColumns._ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
-            + TrailersColumns.MOVIE_ID + " INTEGER NOT NULL, "
-            + TrailersColumns.TRAILER_YOUTUBE_ID + " TEXT NOT NULL "
-            + ", CONSTRAINT fk_movie_id FOREIGN KEY (" + TrailersColumns.MOVIE_ID + ") REFERENCES favorites (_id) ON DELETE CASCADE"
-            + " );";
 
     // @formatter:on
 
@@ -116,8 +99,6 @@ public class FavoritesSQLiteOpenHelper extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_TABLE_FAVORITES);
         db.execSQL(SQL_CREATE_INDEX_FAVORITES_DB_ID);
         db.execSQL(SQL_CREATE_INDEX_FAVORITES_MOVIE_NAME);
-        db.execSQL(SQL_CREATE_TABLE_REVIEWS);
-        db.execSQL(SQL_CREATE_TABLE_TRAILERS);
         mOpenHelperCallbacks.onPostCreate(mContext, db);
     }
 

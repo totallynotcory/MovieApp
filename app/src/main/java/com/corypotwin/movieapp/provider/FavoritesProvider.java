@@ -13,8 +13,6 @@ import android.util.Log;
 import com.corypotwin.movieapp.BuildConfig;
 import com.corypotwin.movieapp.provider.base.BaseContentProvider;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
-import com.corypotwin.movieapp.provider.reviews.ReviewsColumns;
-import com.corypotwin.movieapp.provider.trailers.TrailersColumns;
 
 public class FavoritesProvider extends BaseContentProvider {
     private static final String TAG = FavoritesProvider.class.getSimpleName();
@@ -30,12 +28,6 @@ public class FavoritesProvider extends BaseContentProvider {
     private static final int URI_TYPE_FAVORITES = 0;
     private static final int URI_TYPE_FAVORITES_ID = 1;
 
-    private static final int URI_TYPE_REVIEWS = 2;
-    private static final int URI_TYPE_REVIEWS_ID = 3;
-
-    private static final int URI_TYPE_TRAILERS = 4;
-    private static final int URI_TYPE_TRAILERS_ID = 5;
-
 
 
     private static final UriMatcher URI_MATCHER = new UriMatcher(UriMatcher.NO_MATCH);
@@ -43,10 +35,6 @@ public class FavoritesProvider extends BaseContentProvider {
     static {
         URI_MATCHER.addURI(AUTHORITY, FavoritesColumns.TABLE_NAME, URI_TYPE_FAVORITES);
         URI_MATCHER.addURI(AUTHORITY, FavoritesColumns.TABLE_NAME + "/#", URI_TYPE_FAVORITES_ID);
-        URI_MATCHER.addURI(AUTHORITY, ReviewsColumns.TABLE_NAME, URI_TYPE_REVIEWS);
-        URI_MATCHER.addURI(AUTHORITY, ReviewsColumns.TABLE_NAME + "/#", URI_TYPE_REVIEWS_ID);
-        URI_MATCHER.addURI(AUTHORITY, TrailersColumns.TABLE_NAME, URI_TYPE_TRAILERS);
-        URI_MATCHER.addURI(AUTHORITY, TrailersColumns.TABLE_NAME + "/#", URI_TYPE_TRAILERS_ID);
     }
 
     @Override
@@ -67,16 +55,6 @@ public class FavoritesProvider extends BaseContentProvider {
                 return TYPE_CURSOR_DIR + FavoritesColumns.TABLE_NAME;
             case URI_TYPE_FAVORITES_ID:
                 return TYPE_CURSOR_ITEM + FavoritesColumns.TABLE_NAME;
-
-            case URI_TYPE_REVIEWS:
-                return TYPE_CURSOR_DIR + ReviewsColumns.TABLE_NAME;
-            case URI_TYPE_REVIEWS_ID:
-                return TYPE_CURSOR_ITEM + ReviewsColumns.TABLE_NAME;
-
-            case URI_TYPE_TRAILERS:
-                return TYPE_CURSOR_DIR + TrailersColumns.TABLE_NAME;
-            case URI_TYPE_TRAILERS_ID:
-                return TYPE_CURSOR_ITEM + TrailersColumns.TABLE_NAME;
 
         }
         return null;
@@ -128,36 +106,12 @@ public class FavoritesProvider extends BaseContentProvider {
                 res.orderBy = FavoritesColumns.DEFAULT_ORDER;
                 break;
 
-            case URI_TYPE_REVIEWS:
-            case URI_TYPE_REVIEWS_ID:
-                res.table = ReviewsColumns.TABLE_NAME;
-                res.idColumn = ReviewsColumns._ID;
-                res.tablesWithJoins = ReviewsColumns.TABLE_NAME;
-                if (FavoritesColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + FavoritesColumns.TABLE_NAME + " AS " + ReviewsColumns.PREFIX_FAVORITES + " ON " + ReviewsColumns.TABLE_NAME + "." + ReviewsColumns.MOVIE_ID + "=" + ReviewsColumns.PREFIX_FAVORITES + "." + FavoritesColumns._ID;
-                }
-                res.orderBy = ReviewsColumns.DEFAULT_ORDER;
-                break;
-
-            case URI_TYPE_TRAILERS:
-            case URI_TYPE_TRAILERS_ID:
-                res.table = TrailersColumns.TABLE_NAME;
-                res.idColumn = TrailersColumns._ID;
-                res.tablesWithJoins = TrailersColumns.TABLE_NAME;
-                if (FavoritesColumns.hasColumns(projection)) {
-                    res.tablesWithJoins += " LEFT OUTER JOIN " + FavoritesColumns.TABLE_NAME + " AS " + TrailersColumns.PREFIX_FAVORITES + " ON " + TrailersColumns.TABLE_NAME + "." + TrailersColumns.MOVIE_ID + "=" + TrailersColumns.PREFIX_FAVORITES + "." + FavoritesColumns._ID;
-                }
-                res.orderBy = TrailersColumns.DEFAULT_ORDER;
-                break;
-
             default:
                 throw new IllegalArgumentException("The uri '" + uri + "' is not supported by this ContentProvider");
         }
 
         switch (matchedId) {
             case URI_TYPE_FAVORITES_ID:
-            case URI_TYPE_REVIEWS_ID:
-            case URI_TYPE_TRAILERS_ID:
                 id = uri.getLastPathSegment();
         }
         if (id != null) {

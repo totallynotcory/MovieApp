@@ -51,4 +51,18 @@ public interface FavoritesModel extends BaseModel {
      */
     @Nullable
     String getPosterUrl();
+
+    /**
+     * Get the {@code reviews_url} value.
+     * Can be {@code null}.
+     */
+    @Nullable
+    String getReviewsUrl();
+
+    /**
+     * Get the {@code trailers_url} value.
+     * Can be {@code null}.
+     */
+    @Nullable
+    String getTrailersUrl();
 }

@@ -317,4 +317,84 @@ public class FavoritesSelection extends AbstractSelection<FavoritesSelection> {
         orderBy(FavoritesColumns.POSTER_URL, false);
         return this;
     }
+
+    public FavoritesSelection reviewsUrl(String... value) {
+        addEquals(FavoritesColumns.REVIEWS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection reviewsUrlNot(String... value) {
+        addNotEquals(FavoritesColumns.REVIEWS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection reviewsUrlLike(String... value) {
+        addLike(FavoritesColumns.REVIEWS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection reviewsUrlContains(String... value) {
+        addContains(FavoritesColumns.REVIEWS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection reviewsUrlStartsWith(String... value) {
+        addStartsWith(FavoritesColumns.REVIEWS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection reviewsUrlEndsWith(String... value) {
+        addEndsWith(FavoritesColumns.REVIEWS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection orderByReviewsUrl(boolean desc) {
+        orderBy(FavoritesColumns.REVIEWS_URL, desc);
+        return this;
+    }
+
+    public FavoritesSelection orderByReviewsUrl() {
+        orderBy(FavoritesColumns.REVIEWS_URL, false);
+        return this;
+    }
+
+    public FavoritesSelection trailersUrl(String... value) {
+        addEquals(FavoritesColumns.TRAILERS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection trailersUrlNot(String... value) {
+        addNotEquals(FavoritesColumns.TRAILERS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection trailersUrlLike(String... value) {
+        addLike(FavoritesColumns.TRAILERS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection trailersUrlContains(String... value) {
+        addContains(FavoritesColumns.TRAILERS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection trailersUrlStartsWith(String... value) {
+        addStartsWith(FavoritesColumns.TRAILERS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection trailersUrlEndsWith(String... value) {
+        addEndsWith(FavoritesColumns.TRAILERS_URL, value);
+        return this;
+    }
+
+    public FavoritesSelection orderByTrailersUrl(boolean desc) {
+        orderBy(FavoritesColumns.TRAILERS_URL, desc);
+        return this;
+    }
+
+    public FavoritesSelection orderByTrailersUrl() {
+        orderBy(FavoritesColumns.TRAILERS_URL, false);
+        return this;
+    }
 }

@@ -1,13 +1,11 @@
 package com.corypotwin.movieapp;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.View;
 
 public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
@@ -42,9 +40,21 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                         .commit();
             }
         } else {
+            getSupportActionBar().setElevation(0f);
             mTwoPane = false;
         }
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        if(mTwoPane){
+            inflater.inflate(R.menu.menu_main_two_pane, menu);
+        } else {
+            inflater.inflate(R.menu.menu_main, menu);
+        }
+        return true;
     }
 
     /**

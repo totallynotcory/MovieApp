@@ -19,16 +19,18 @@ public class Movie implements Parcelable{
 
     private String mPosterUrl;
     private String mTrailerUrl;
-    private String mReviews;
+    private String mReviewsUrl;
 
     public Movie(int id, String title, String description, String rating, String releaseDate,
-                    String posterUrl){
+                    String posterUrl, String reviews, String trailerUrl){
         mId = id;
         mTitle = title;
         mDescription = description;
         mRating = rating;
         mReleaseDate = releaseDate;
         mPosterUrl = posterUrl;
+        mReviewsUrl = reviews;
+        mTrailerUrl = trailerUrl;
     }
 
     // This is the necessary bits for making a parcelable.  Yeehaw!
@@ -56,7 +58,7 @@ public class Movie implements Parcelable{
         out.writeString(mReleaseDate);
         out.writeString(mPosterUrl);
         out.writeString(mTrailerUrl);
-        out.writeString(mReviews);
+        out.writeString(mReviewsUrl);
     }
 
     private Movie(Parcel in) {
@@ -67,7 +69,7 @@ public class Movie implements Parcelable{
         mReleaseDate = in.readString();
         mPosterUrl = in.readString();
         mTrailerUrl = in.readString();
-        mReviews = in.readString();
+        mReviewsUrl = in.readString();
     }
 
     // It's your setters and getters from here on out kid.  Pretty predicatable stuff
@@ -100,12 +102,8 @@ public class Movie implements Parcelable{
         return mTrailerUrl;
     }
 
-    public String getmReviews() {
-        return mReviews;
-    }
-
-    public void setmReviews(String mReviews) {
-        this.mReviews = mReviews;
+    public String getmReviewsUrl() {
+        return mReviewsUrl;
     }
 
     public void setmId(int mId) {
@@ -132,8 +130,14 @@ public class Movie implements Parcelable{
         this.mPosterUrl = mPosterUrl;
     }
 
+    public void setmReviewsUrl(String mReviewsUrl) {
+        this.mReviewsUrl = mReviewsUrl;
+    }
+
     public void setmTrailerUrl(String mTrailerUrl) {
         this.mTrailerUrl = mTrailerUrl;
     }
+
+
 
 }

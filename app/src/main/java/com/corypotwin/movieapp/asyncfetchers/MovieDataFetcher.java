@@ -6,8 +6,6 @@ package com.corypotwin.movieapp.asyncfetchers;
 
 import android.app.Activity;
 import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -112,6 +110,8 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
     protected void onPostExecute(List<Movie> movieResults){
         TextView noConnection = (TextView) mActivity.findViewById(R.id.no_connection);
 
+
+
         if (movieResults != null){
             mImageAdapter.clear();
             for (int i = 0; i < movieResults.size(); i++) {
@@ -165,14 +165,6 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
             String releaseDate = individualMovie.getString(RELEASE_DATE_KEY);
             String imageUrl= posterUrl + individualMovie.getString(POSTER_KEY);
 
-            String trailerUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
-                    .appendPath("movie")
-                    .appendPath(id + "")
-                    .appendPath(TRAILERS_URL_ADD)
-                    .appendQueryParameter(USER_KEY_PARAM, secretKey)
-                    .build()
-                    .toString();
-
             String reviewsUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
                     .appendPath("movie")
                     .appendPath(id + "")
@@ -181,10 +173,18 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
                     .build()
                     .toString();
 
+            String trailerUrl = Uri.parse(MOVIE_BASE_URL).buildUpon()
+                    .appendPath("movie")
+                    .appendPath(id + "")
+                    .appendPath(TRAILERS_URL_ADD)
+                    .appendQueryParameter(USER_KEY_PARAM, secretKey)
+                    .build()
+                    .toString();
+
 
             Movie thisMovie = new Movie(id, title, description, rating,
-                    releaseDate, imageUrl);
-            thisMovie.setmReviews(reviewsUrl);
+                    releaseDate, imageUrl, reviewsUrl, trailerUrl);
+            thisMovie.setmReviewsUrl(reviewsUrl);
             thisMovie.setmTrailerUrl(trailerUrl);
 
             movieData.add(thisMovie);

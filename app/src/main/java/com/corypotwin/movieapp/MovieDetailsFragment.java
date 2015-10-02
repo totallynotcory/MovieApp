@@ -1,49 +1,44 @@
 package com.corypotwin.movieapp;
 
-import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.corypotwin.movieapp.asyncfetchers.DetailDataFetcher;
-import com.corypotwin.movieapp.oldfavdata.FavoriteMovieContract;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
 import com.corypotwin.movieapp.provider.favorites.FavoritesContentValues;
-import com.corypotwin.movieapp.provider.favorites.FavoritesCursor;
 import com.corypotwin.movieapp.provider.favorites.FavoritesSelection;
-import com.corypotwin.movieapp.provider.reviews.ReviewsColumns;
-import com.corypotwin.movieapp.provider.reviews.ReviewsContentValues;
-import com.corypotwin.movieapp.provider.reviews.ReviewsSelection;
-import com.corypotwin.movieapp.provider.trailers.TrailersColumns;
-import com.corypotwin.movieapp.provider.trailers.TrailersContentValues;
-import com.corypotwin.movieapp.provider.trailers.TrailersSelection;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class MovieDetailsFragment extends Fragment {
 
+    private String firstYoutubeTrailerToShare;
+    private ShareActionProvider mShareActionProvider;
     private final String LOG_TAG = "Movie Details Fragment";
     // Stores details of movie to show in this fragment
     private Movie movieDetails;
-    // Used after the async task is done to return the Trailers + Reviews for current movie.
-    private ReviewsAndTrailers mRevsAndTrails;
-
 
     public MovieDetailsFragment() {
+        setHasOptionsMenu(true);
+        firstYoutubeTrailerToShare = "";
     }
 
     @Override
@@ -54,7 +49,6 @@ public class MovieDetailsFragment extends Fragment {
         Bundle args = getArguments();
         if(args != null){
             movieDetails = args.getParcelable(MainActivity.INDIVIDUAL_MOVIE_TAG);
-
             updateReviewsAndTrailers(rootView);
             populateDetailChildViews(rootView);
         } else {
@@ -65,8 +59,19 @@ public class MovieDetailsFragment extends Fragment {
 
     }
 
-    public void setmRevsAndTrails(ReviewsAndTrailers mRevsAndTrails) {
-        this.mRevsAndTrails = mRevsAndTrails;
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate menu resource file.
+
+        // Locate MenuItem with ShareActionProvider
+        MenuItem item = menu.findItem(R.id.menu_item_share);
+
+        // Fetch and store ShareActionProvider
+        mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
+
+        if (firstYoutubeTrailerToShare != null && !firstYoutubeTrailerToShare.isEmpty()){
+            mShareActionProvider.setShareIntent(createShareTrailerIntent());
+        }
     }
 
     /**
@@ -78,7 +83,7 @@ public class MovieDetailsFragment extends Fragment {
         try {
         DetailDataFetcher ddFetcher = new DetailDataFetcher(
                 movieDetails.getmId(),
-                movieDetails.getmReviews(),
+                movieDetails.getmReviewsUrl(),
                 movieDetails.getmTrailerUrl(),
                 getActivity(),
                 rootView,
@@ -101,7 +106,7 @@ public class MovieDetailsFragment extends Fragment {
         ((TextView) rootView.findViewById(R.id.title)).setText(movieDetails.getmTitle());
 
         // Description
-        if(movieDetails.getmDescription() == null){
+        if(movieDetails.getmDescription().equals("null")){
             ((TextView) rootView.findViewById(R.id.description))
                     .setText(R.string.no_description);
         } else {
@@ -149,7 +154,7 @@ public class MovieDetailsFragment extends Fragment {
     private boolean movieInTables() {
         FavoritesSelection where = new FavoritesSelection();
         where.movieName(movieDetails.getmTitle());
-        String[] projection = {FavoritesColumns.DB_ID};
+
         Cursor c = getActivity().getContentResolver().query(FavoritesColumns.CONTENT_URI, null,
                 where.sel(), where.args(), null);
 
@@ -193,35 +198,12 @@ public class MovieDetailsFragment extends Fragment {
                 .putDescription(movieDetails.getmDescription())
                 .putRating(movieDetails.getmRating())
                 .putReleaseDate(movieDetails.getmReleaseDate())
-                .putPosterUrl(movieDetails.getmPosterUrl());
+                .putPosterUrl(movieDetails.getmPosterUrl())
+                .putReviewsUrl(movieDetails.getmReviewsUrl())
+                .putTrailersUrl(movieDetails.getmTrailerUrl());
 
         getActivity().getContentResolver().insert(movieDetailsToSave.uri(),
                 movieDetailsToSave.values());
-
-/*        if(mRevsAndTrails.hasReviews()) {
-            for (int i = 0; i < mRevsAndTrails.reviewsSize(); i++) {
-                ReviewsContentValues reviewDetailsToSave = new ReviewsContentValues();
-                reviewDetailsToSave.putMovieId(movieDetails.getmId())
-                        .putReview(mRevsAndTrails.getReviews().get(i).get(0))
-                        .putAuthor(mRevsAndTrails.getReviews().get(i).get(1));
-
-                ContentValues cv = reviewDetailsToSave.values();
-
-                getActivity().getContentResolver().insert(ReviewsColumns.CONTENT_URI,
-                        reviewDetailsToSave.values());
-            }
-        }
-
-        if(mRevsAndTrails.hasTrailers()){
-            for (int i = 0; i < mRevsAndTrails.trailerSize(); i++) {
-                TrailersContentValues trailersDetailsToSave = new TrailersContentValues();
-                trailersDetailsToSave.putMovieId(movieDetails.getmId())
-                        .putTrailerYoutubeId(mRevsAndTrails.getTrailers().get(i));
-
-                getActivity().getContentResolver().insert(trailersDetailsToSave.uri(),
-                        trailersDetailsToSave.values());
-            }
-        }*/
     }
 
     /**
@@ -232,14 +214,22 @@ public class MovieDetailsFragment extends Fragment {
         where.dbId(movieDetails.getmId());
         int deletedFavorites = where.delete(getActivity().getContentResolver());
 
-        ReviewsSelection where1 = new ReviewsSelection();
-        where1.movieId(movieDetails.getmId());
-        int deletedReviews = where1.delete(getActivity().getContentResolver());
+    }
 
-        TrailersSelection where2 = new TrailersSelection();
-        where2.movieId(movieDetails.getmId());
-        int deletedTrailers = where2.delete(getActivity().getContentResolver());
+    public void setFirstYoutubeTrailerToShare(String firstYoutubeTrailerToShare) {
+        this.firstYoutubeTrailerToShare = firstYoutubeTrailerToShare;
+        if(mShareActionProvider != null){
+            mShareActionProvider.setShareIntent(createShareTrailerIntent());
+        }
 
+    }
+
+    private Intent createShareTrailerIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+        shareIntent.setType("text/plain");
+        shareIntent.putExtra(Intent.EXTRA_TEXT, firstYoutubeTrailerToShare);
+        return shareIntent;
     }
 
 }

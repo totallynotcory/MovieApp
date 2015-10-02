@@ -87,4 +87,24 @@ public class FavoritesCursor extends AbstractCursor implements FavoritesModel {
         String res = getStringOrNull(FavoritesColumns.POSTER_URL);
         return res;
     }
+
+    /**
+     * Get the {@code reviews_url} value.
+     * Can be {@code null}.
+     */
+    @Nullable
+    public String getReviewsUrl() {
+        String res = getStringOrNull(FavoritesColumns.REVIEWS_URL);
+        return res;
+    }
+
+    /**
+     * Get the {@code trailers_url} value.
+     * Can be {@code null}.
+     */
+    @Nullable
+    public String getTrailersUrl() {
+        String res = getStringOrNull(FavoritesColumns.TRAILERS_URL);
+        return res;
+    }
 }

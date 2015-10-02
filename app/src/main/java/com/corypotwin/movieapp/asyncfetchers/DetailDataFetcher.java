@@ -123,10 +123,11 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, ReviewsAndTrailers>
      */
     protected void onPostExecute(ReviewsAndTrailers revsAndTrailsForThisMovie){
 
-        mMdf.setmRevsAndTrails(revsAndTrailsForThisMovie);
-
         // Add trailers to the detail review if any exist.
         if (revsAndTrailsForThisMovie.hasTrailers()){
+
+            mMdf.setFirstYoutubeTrailerToShare(youtubeBaseVideoUrl +
+                    revsAndTrailsForThisMovie.getTrailers().get(0));
 
             LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             List<String> allTrailers = revsAndTrailsForThisMovie.getTrailers();

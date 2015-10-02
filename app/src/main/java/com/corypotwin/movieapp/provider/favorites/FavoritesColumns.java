@@ -5,8 +5,6 @@ import android.provider.BaseColumns;
 
 import com.corypotwin.movieapp.provider.FavoritesProvider;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
-import com.corypotwin.movieapp.provider.reviews.ReviewsColumns;
-import com.corypotwin.movieapp.provider.trailers.TrailersColumns;
 
 /**
  * A users favorite movies
@@ -32,6 +30,10 @@ public class FavoritesColumns implements BaseColumns {
 
     public static final String POSTER_URL = "poster_url";
 
+    public static final String REVIEWS_URL = "reviews_url";
+
+    public static final String TRAILERS_URL = "trailers_url";
+
 
     public static final String DEFAULT_ORDER = TABLE_NAME + "." +_ID;
 
@@ -43,7 +45,9 @@ public class FavoritesColumns implements BaseColumns {
             RELEASE_DATE,
             RATING,
             DESCRIPTION,
-            POSTER_URL
+            POSTER_URL,
+            REVIEWS_URL,
+            TRAILERS_URL
     };
     // @formatter:on
 
@@ -56,6 +60,8 @@ public class FavoritesColumns implements BaseColumns {
             if (c.equals(RATING) || c.contains("." + RATING)) return true;
             if (c.equals(DESCRIPTION) || c.contains("." + DESCRIPTION)) return true;
             if (c.equals(POSTER_URL) || c.contains("." + POSTER_URL)) return true;
+            if (c.equals(REVIEWS_URL) || c.contains("." + REVIEWS_URL)) return true;
+            if (c.equals(TRAILERS_URL) || c.contains("." + TRAILERS_URL)) return true;
         }
         return false;
     }

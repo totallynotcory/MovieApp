@@ -15,6 +15,8 @@ public class MovieDetails extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_details);
+        getSupportActionBar().setElevation(0f);
+
         if (savedInstanceState == null){
 
             Bundle args = new Bundle();

@@ -64,14 +64,18 @@
                 />
 
 
-            <!-- questionable implementation of checkbox -->
             <CheckBox
                 android:id="@+id/favorite_checkbox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/not_favorite"
+                android:layout_marginTop="8dp"
+                android:layout_marginLeft="8dp"
+                android:paddingLeft="16dp"
                 android:textAppearance="?android:textAppearanceMedium"
-                android:onClick="favoriteClick"/>
+                android:onClick="favoriteClick"
+                android:button="@drawable/customdrawableclickbox"
+                />
 
 
         </LinearLayout>
@@ -92,7 +96,7 @@
         android:id="@+id/trailer_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_margin="8dp"
+        android:layout_margin="16dp"
         android:textAppearance="?android:textAppearanceMedium"
         />
 
@@ -112,7 +116,7 @@
         android:id="@+id/reviews_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="16dp"
         android:layout_marginTop="24dp"
         android:textAppearance="?android:textAppearanceMedium"
         />

@@ -2,6 +2,9 @@
 
     <!-- Base application theme. Looks good to me-->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/weird_blue</item>
+        <item name="colorPrimaryDark">@color/weird_dark_blue</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
     <style name="SettingsTheme" parent="AppTheme">
@@ -10,7 +13,7 @@
 
 
     <style name="ActionBar.V14.Sunshine.NoTitle" parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-                <item name="android:background">#000000</item>
+                <item name="android:background">@color/weird_blue</item>
                 <item name="android:height">56dp</item>
             </style>
 </resources>

@@ -91,4 +91,24 @@ public class FavoritesContentValues extends AbstractContentValues {
         mContentValues.putNull(FavoritesColumns.POSTER_URL);
         return this;
     }
+
+    public FavoritesContentValues putReviewsUrl(@Nullable String value) {
+        mContentValues.put(FavoritesColumns.REVIEWS_URL, value);
+        return this;
+    }
+
+    public FavoritesContentValues putReviewsUrlNull() {
+        mContentValues.putNull(FavoritesColumns.REVIEWS_URL);
+        return this;
+    }
+
+    public FavoritesContentValues putTrailersUrl(@Nullable String value) {
+        mContentValues.put(FavoritesColumns.TRAILERS_URL, value);
+        return this;
+    }
+
+    public FavoritesContentValues putTrailersUrlNull() {
+        mContentValues.putNull(FavoritesColumns.TRAILERS_URL);
+        return this;
+    }
 }
