@@ -1,23 +1,12 @@
 package com.corypotwin.movieapp.asyncfetchers;
 
 import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.corypotwin.movieapp.MovieDetailsFragment;
-import com.corypotwin.movieapp.R;
-import com.corypotwin.movieapp.Review;
-import com.corypotwin.movieapp.ReviewsAndTrailers;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.Picasso;
+import com.corypotwin.movieapp.fragments.MovieDetailsFragment;
+import com.corypotwin.movieapp.customdata.Review;
+import com.corypotwin.movieapp.customdata.ReviewsAndTrailers;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,8 +17,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * Used to fetch data for the detail fragment - specifically Youtube URLs and Review text
@@ -47,7 +34,6 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, ReviewsAndTrailers>
     public DetailDataFetcher(String rUrl, String tUrl, Context context,
                              MovieDetailsFragment mdf)
             throws MalformedURLException{
-
         reviewUrl = rUrl;
         trailerUrl = tUrl;
         mContext = context;

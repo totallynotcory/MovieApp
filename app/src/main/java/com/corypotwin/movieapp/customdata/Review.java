@@ -1,26 +1,20 @@
-package com.corypotwin.movieapp;
+package com.corypotwin.movieapp.customdata;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by ctpotwin on 10/3/15.
+ * Parcelable to hold reviews.
  */
 public class Review implements Parcelable {
 
-    // ids returned from the movie db are currently 6 digits long, seems ok for an int.
-    // If 1.9+ billion more movies are released, please change this to a long.
-
     private String review;
     private String author;
-
-
 
     public Review(String review, String author){
         this.review = review;
         this.author = author;
     }
-
 
     // This is the necessary bits for making a parcelable.  Yeehaw!
 
@@ -51,6 +45,8 @@ public class Review implements Parcelable {
         author = in.readString();
 
     }
+
+    // Setters and Getters
 
     public String getReview() {
         return review;

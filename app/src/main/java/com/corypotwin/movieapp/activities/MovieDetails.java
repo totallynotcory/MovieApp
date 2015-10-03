@@ -1,4 +1,4 @@
-package com.corypotwin.movieapp;
+package com.corypotwin.movieapp.activities;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,11 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+
+import com.corypotwin.movieapp.R;
+import com.corypotwin.movieapp.activities.MainActivity;
+import com.corypotwin.movieapp.activities.SettingsActivity;
+import com.corypotwin.movieapp.fragments.MovieDetailsFragment;
 
 public class MovieDetails extends AppCompatActivity {
 

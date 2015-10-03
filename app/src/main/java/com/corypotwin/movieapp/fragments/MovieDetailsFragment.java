@@ -1,4 +1,4 @@
-package com.corypotwin.movieapp;
+package com.corypotwin.movieapp.fragments;
 
 import android.content.Context;
 import android.content.Intent;
@@ -20,7 +20,11 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.corypotwin.movieapp.activities.MainActivity;
+import com.corypotwin.movieapp.R;
 import com.corypotwin.movieapp.asyncfetchers.DetailDataFetcher;
+import com.corypotwin.movieapp.customdata.Movie;
+import com.corypotwin.movieapp.customdata.Review;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
 import com.corypotwin.movieapp.provider.favorites.FavoritesContentValues;
 import com.corypotwin.movieapp.provider.favorites.FavoritesSelection;
@@ -42,10 +46,10 @@ public class MovieDetailsFragment extends Fragment {
     // Stores details of movie to show in this fragment
     private Movie movieDetails;
 
-    private final String TRAILERS = "Trailers";
-    private ArrayList<String> mTrailers;
     private String youtubeBaseVideoUrl = "https://www.youtube.com/watch?v=";
     private String youtubeBaseJpgUrl = "http://img.youtube.com/vi/";
+    private final String TRAILERS = "Trailers";
+    private ArrayList<String> mTrailers;
 
     private final String REVIEWS = "Reviews";
     private ArrayList<Review> mReviews;
@@ -60,9 +64,7 @@ public class MovieDetailsFragment extends Fragment {
     @Override
     public void onConfigurationChanged(Configuration newConfiguration){
         super.onConfigurationChanged(newConfiguration);
-
     }
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +97,6 @@ public class MovieDetailsFragment extends Fragment {
         }
 
         return mRootView;
-
     }
 
     @Override
@@ -124,6 +125,10 @@ public class MovieDetailsFragment extends Fragment {
 
     }
 
+    /**
+     * Inserts trailers into detail view.
+     * @param trailers trailers to insert into view
+     */
     public void insertTrailersBackIn(ArrayList<String> trailers){
 
         LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -181,6 +186,10 @@ public class MovieDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * Inserts reviews into detail view.
+     * @param reviews reviews to insert into view
+     */
     public void insertReviewsBackIn(ArrayList<Review> reviews){
 
         LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -215,14 +224,14 @@ public class MovieDetailsFragment extends Fragment {
      */
     public void updateReviewsAndTrailers() {
         try {
-        DetailDataFetcher ddFetcher = new DetailDataFetcher(
-                movieDetails.getmReviewsUrl(),
-                movieDetails.getmTrailerUrl(),
-                getActivity(),
-                this);
-        ddFetcher.execute();
+            DetailDataFetcher ddFetcher = new DetailDataFetcher(
+                    movieDetails.getmReviewsUrl(),
+                    movieDetails.getmTrailerUrl(),
+                    getActivity(),
+                    this);
+            ddFetcher.execute();
         } catch(MalformedURLException e){
-            Log.e(LOG_TAG, "updateReviewsAndTrailers had a malformed URL");
+            Log.e(LOG_TAG, "updateReviewsAndTrailers received a malformed URL");
         }
 
     }
@@ -283,6 +292,10 @@ public class MovieDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * Checks the favorites to see if the movie in details exists
+     * @return true if movie is favorited, else false
+     */
     private boolean movieInTables() {
         FavoritesSelection where = new FavoritesSelection();
         where.movieName(movieDetails.getmTitle());
@@ -299,6 +312,11 @@ public class MovieDetailsFragment extends Fragment {
         }
     }
 
+    /**
+     * Adds or removes movie from favorite database dependant on the new state of the check box
+     * and whether it already exists or doesn't in table.
+     * @param v checkbox view
+     */
     public void favoriteClick(View v){
 
         CheckBox favoriteBox = (CheckBox) v;
@@ -348,6 +366,10 @@ public class MovieDetailsFragment extends Fragment {
 
     }
 
+    /**
+     * sets ShareAction provider to the first trailer
+     * @param trailerUrl url of the trailer to share
+     */
     public void setFirstYoutubeTrailerToShare(String trailerUrl) {
         this.firstYoutubeTrailerToShare = youtubeBaseVideoUrl + trailerUrl;
         if(mShareActionProvider != null){
@@ -356,6 +378,10 @@ public class MovieDetailsFragment extends Fragment {
 
     }
 
+    /**
+     * Creates share Intent for the trailers
+     * @return share intent.
+     */
     private Intent createShareTrailerIntent() {
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);

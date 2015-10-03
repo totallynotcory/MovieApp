@@ -1,10 +1,9 @@
-package com.corypotwin.movieapp;
+package com.corypotwin.movieapp.customdata;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
- * Created by ctpotwin on 9/30/15.
+ * Class to hold Reviews and Trailers.
  */
 
 public class ReviewsAndTrailers {

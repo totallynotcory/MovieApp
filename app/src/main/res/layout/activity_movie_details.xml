@@ -3,5 +3,5 @@ xmlns:tools="http://schemas.android.com/tools"
 android:id="@+id/detail_fragment"
 android:layout_width="match_parent"
 android:layout_height="match_parent"
-tools:context="com.corypotwin.movieapp.MovieDetailsFragment"
+tools:context="com.corypotwin.movieapp.fragments.MovieDetailsFragment"
 tools:ignore="MergeRootFrame" />

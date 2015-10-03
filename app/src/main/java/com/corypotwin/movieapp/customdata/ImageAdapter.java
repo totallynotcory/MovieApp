@@ -1,4 +1,4 @@
-package com.corypotwin.movieapp;
+package com.corypotwin.movieapp.customdata;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.NetworkPolicy;
+import com.corypotwin.movieapp.R;
+import com.corypotwin.movieapp.customdata.Movie;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

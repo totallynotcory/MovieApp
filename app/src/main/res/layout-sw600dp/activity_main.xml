@@ -9,7 +9,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         tools:layout="@layout/fragment_main"
         android:id="@+id/main_fragment"
-        android:name="com.corypotwin.movieapp.MainActivityFragment"
+        android:name="com.corypotwin.movieapp.fragments.MainActivityFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"/>
@@ -19,7 +19,7 @@
         android:id="@+id/detail_fragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        tools:context="com.corypotwin.movieapp.MovieDetailsFragment"
+        tools:context="com.corypotwin.movieapp.fragments.MovieDetailsFragment"
         tools:ignore="MergeRootFrame"
         android:layout_weight="2"/>
 

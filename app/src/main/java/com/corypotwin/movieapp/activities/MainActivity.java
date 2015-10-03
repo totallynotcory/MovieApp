@@ -1,4 +1,4 @@
-package com.corypotwin.movieapp;
+package com.corypotwin.movieapp.activities;
 
 import android.content.Intent;
 import android.preference.PreferenceManager;
@@ -9,9 +9,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
+import com.corypotwin.movieapp.R;
+import com.corypotwin.movieapp.customdata.Movie;
+import com.corypotwin.movieapp.fragments.MainActivityFragment;
+import com.corypotwin.movieapp.fragments.MovieDetailsFragment;
 
-    // TODO add a color file to the values and redo stuff in touch_selector
+public class MainActivity extends AppCompatActivity implements MainActivityFragment.Callback{
 
     private static final String DETAILFRAGMENT_TAG = "DFTAG";
     private boolean mTwoPane;

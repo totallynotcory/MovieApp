@@ -1,28 +1,25 @@
-package com.corypotwin.movieapp;
+package com.corypotwin.movieapp.fragments;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
 
+import com.corypotwin.movieapp.R;
 import com.corypotwin.movieapp.asyncfetchers.MovieDataFetcher;
+import com.corypotwin.movieapp.customdata.ImageAdapter;
+import com.corypotwin.movieapp.customdata.Movie;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
 import com.corypotwin.movieapp.provider.favorites.FavoritesSelection;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * A fragment containing the Movie grid view

@@ -11,9 +11,9 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.TextView;
 
-import com.corypotwin.movieapp.ImageAdapter;
-import com.corypotwin.movieapp.MainActivityFragment;
-import com.corypotwin.movieapp.Movie;
+import com.corypotwin.movieapp.customdata.ImageAdapter;
+import com.corypotwin.movieapp.fragments.MainActivityFragment;
+import com.corypotwin.movieapp.customdata.Movie;
 import com.corypotwin.movieapp.R;
 import com.corypotwin.movieapp.SecretKeyFile;
 
@@ -28,7 +28,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 /**
  * Creates an ASync thread to request, receive, and parse data from the MovieDB API

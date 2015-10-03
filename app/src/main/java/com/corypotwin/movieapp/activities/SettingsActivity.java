@@ -1,4 +1,4 @@
-package com.corypotwin.movieapp;
+package com.corypotwin.movieapp.activities;
 
 import android.annotation.TargetApi;
 import android.content.Context;

@@ -1,10 +1,10 @@
-package com.corypotwin.movieapp;
+package com.corypotwin.movieapp.customdata;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- * Created by ctpotwin on 9/26/15.
+ * Parcelable to hold movies.
  */
 public class Movie implements Parcelable{
 
