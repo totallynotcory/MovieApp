@@ -83,6 +83,10 @@ public class MainActivityFragment extends Fragment {
                 ((Callback) getActivity()).onItemSelected(singleMovieDetails);
             }
         });
+
+        if(savedInstanceState != null && savedInstanceState.containsKey(MOVIE_ARRAY)){
+            insertDataBackIntoImageAdapter();
+        }
         return rootView;
     }
 
@@ -96,9 +100,7 @@ public class MainActivityFragment extends Fragment {
                 getString(R.string.pref_sort_by_key),
                 getString(R.string.pref_sort_by_default));
 
-        if(movieData != null){
-            insertDataBackIntoImageAdapter();
-        }
+
         // If the previous sortBy preference does not match the current preference,
         // we need to refresh. This include the initial load as well.
         if(!sortBy.equals(sortBySetting)){
@@ -139,11 +141,16 @@ public class MainActivityFragment extends Fragment {
      */
     private void insertFavoriteMovies(){
 
+        if(movieData != null) {
+            movieData.clear();
+        }
+
         FavoritesSelection where = new FavoritesSelection();
         Cursor c = getActivity().getContentResolver().query(FavoritesColumns.CONTENT_URI, null,
                 null, null, null);
 
         if (c.moveToFirst()){
+            ArrayList<Movie> favoritesMovies = new ArrayList<>(c.getCount());
             mImageAdapter.clear();
             do{
                 Movie aFavoriteMovie = new Movie(
@@ -157,7 +164,9 @@ public class MainActivityFragment extends Fragment {
                         c.getString(c.getColumnIndex(FavoritesColumns.TRAILERS_URL))
                         );
                 mImageAdapter.add(aFavoriteMovie);
+                favoritesMovies.add(aFavoriteMovie);
             } while (c.moveToNext());
+            setMovieData(favoritesMovies);
 
         } else {
             mImageAdapter.clear();
