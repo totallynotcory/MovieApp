@@ -1,7 +1,10 @@
 package com.corypotwin.movieapp;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
+import android.net.Uri;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -21,9 +24,12 @@ import com.corypotwin.movieapp.asyncfetchers.DetailDataFetcher;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
 import com.corypotwin.movieapp.provider.favorites.FavoritesContentValues;
 import com.corypotwin.movieapp.provider.favorites.FavoritesSelection;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.net.MalformedURLException;
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -36,33 +42,64 @@ public class MovieDetailsFragment extends Fragment {
     // Stores details of movie to show in this fragment
     private Movie movieDetails;
 
+    private final String TRAILERS = "Trailers";
+    private ArrayList<String> mTrailers;
+    private String youtubeBaseVideoUrl = "https://www.youtube.com/watch?v=";
+    private String youtubeBaseJpgUrl = "http://img.youtube.com/vi/";
+
+    private final String REVIEWS = "Reviews";
+    private ArrayList<Review> mReviews;
+
+    private View mRootView;
+
     public MovieDetailsFragment() {
         setHasOptionsMenu(true);
         firstYoutubeTrailerToShare = "";
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfiguration){
+        super.onConfigurationChanged(newConfiguration);
+
+    }
+
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setRetainInstance(true);
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(TRAILERS)) {
+            mTrailers = savedInstanceState.getStringArrayList(TRAILERS);
+        }
+
+        if (savedInstanceState != null && savedInstanceState.containsKey(REVIEWS)) {
+            mReviews = savedInstanceState.getParcelableArrayList(REVIEWS);
+        }
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
+        mRootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
         Bundle args = getArguments();
         if(args != null){
             movieDetails = args.getParcelable(MainActivity.INDIVIDUAL_MOVIE_TAG);
-            updateReviewsAndTrailers(rootView);
-            populateDetailChildViews(rootView);
+            if(savedInstanceState == null) {
+                updateReviewsAndTrailers();
+            }
+            populateDetailChildViews(mRootView);
         } else {
            return null;
         }
 
-        return rootView;
+        return mRootView;
 
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        // Inflate menu resource file.
-
         // Locate MenuItem with ShareActionProvider
         MenuItem item = menu.findItem(R.id.menu_item_share);
 
@@ -74,19 +111,114 @@ public class MovieDetailsFragment extends Fragment {
         }
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        if(mTrailers != null){
+            insertTrailersBackIn(mTrailers);
+        }
+        if(mReviews != null){
+            insertReviewsBackIn(mReviews);
+        }
+
+    }
+
+    public void insertTrailersBackIn(ArrayList<String> trailers){
+
+        LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        TextView trailersHeader = (TextView) mRootView.findViewById(R.id.trailer_header);
+        trailersHeader.setText(getActivity().getString(R.string.trailers_header));
+
+        ViewGroup insertPoint = (ViewGroup) mRootView.findViewById(R.id.trailers_container);
+
+        if(insertPoint.findViewById(R.id.trailer_image) == null) {
+
+            for (int i = 0; i < trailers.size(); i++) {
+
+                View trailerView = vi.inflate(R.layout.trailer_item, null);
+
+                ImageView image = (ImageView) trailerView.findViewById(R.id.trailer_image);
+                TextView text = (TextView) trailerView.findViewById(R.id.trailer_title);
+
+                String imageUrl = youtubeBaseJpgUrl +
+                        trailers.get(i) + "/0.jpg";
+
+                Picasso.with(getActivity()).
+                        load(imageUrl).
+                        memoryPolicy(MemoryPolicy.NO_CACHE).
+                        networkPolicy(NetworkPolicy.NO_CACHE).
+                        placeholder(R.drawable.no_image_available_black).
+                        error(R.drawable.no_image_available_black).
+                        into(image);
+
+                text.setText("Trailer " + (i + 1));
+
+                final Uri youtubeUrl = Uri.parse(youtubeBaseVideoUrl +
+                        trailers.get(i));
+
+                // Setup trailers so each points to the corresponding Youtube link
+                trailerView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+
+                        Intent videoIntent = new Intent(Intent.ACTION_VIEW);
+                        videoIntent.setData(youtubeUrl);
+
+                        if (videoIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                            getActivity().startActivity(videoIntent);
+                        } else {
+                            Log.d(LOG_TAG, "Couldn't call " + youtubeUrl + ", no receiving apps installed!");
+                        }
+                    }
+                });
+
+                insertPoint.addView(trailerView, i, new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+            }
+        }
+    }
+
+    public void insertReviewsBackIn(ArrayList<Review> reviews){
+
+        LayoutInflater vi = (LayoutInflater) getActivity().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+
+        TextView reviewHeader = (TextView) mRootView.findViewById(R.id.reviews_header);
+        reviewHeader.setText(getActivity().getString(R.string.reviews_header));
+
+        ViewGroup insertPoint = (ViewGroup) mRootView.findViewById(R.id.reviews_container);
+
+        if(insertPoint.findViewById(R.id.review_body) == null) {
+
+            for (int i = 0; i < reviews.size(); i++) {
+
+                View reviewView = vi.inflate(R.layout.review_item, null);
+
+                TextView review = (TextView) reviewView.findViewById(R.id.review_body);
+                TextView reviewer = (TextView) reviewView.findViewById(R.id.reviewer_name);
+
+                review.setText(reviews.get(i).getReview());
+                reviewer.setText("-" + reviews.get(i).getAuthor());
+
+                insertPoint.addView(reviewView, i, new ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
+            }
+        }
+    }
+
+
     /**
      * Launches an async task to retrieve Trailers and Reviews from the server.
-     *
-     * @param rootView - Fragment View used to find appropriate children views
      */
-    public void updateReviewsAndTrailers(View rootView) {
+    public void updateReviewsAndTrailers() {
         try {
         DetailDataFetcher ddFetcher = new DetailDataFetcher(
-                movieDetails.getmId(),
                 movieDetails.getmReviewsUrl(),
                 movieDetails.getmTrailerUrl(),
                 getActivity(),
-                rootView,
                 this);
         ddFetcher.execute();
         } catch(MalformedURLException e){
@@ -216,8 +348,8 @@ public class MovieDetailsFragment extends Fragment {
 
     }
 
-    public void setFirstYoutubeTrailerToShare(String firstYoutubeTrailerToShare) {
-        this.firstYoutubeTrailerToShare = firstYoutubeTrailerToShare;
+    public void setFirstYoutubeTrailerToShare(String trailerUrl) {
+        this.firstYoutubeTrailerToShare = youtubeBaseVideoUrl + trailerUrl;
         if(mShareActionProvider != null){
             mShareActionProvider.setShareIntent(createShareTrailerIntent());
         }
@@ -232,4 +364,18 @@ public class MovieDetailsFragment extends Fragment {
         return shareIntent;
     }
 
+    public void storeTrailers(ArrayList<String> trailers){
+        mTrailers = trailers;
+    }
+
+    public void storeReviews(ArrayList<Review> reviews){
+        mReviews = reviews;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putStringArrayList(TRAILERS, mTrailers);
+        savedInstanceState.putParcelableArrayList(REVIEWS, mReviews);
+        super.onSaveInstanceState(savedInstanceState);
+    }
 }

@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.corypotwin.movieapp.MovieDetailsFragment;
 import com.corypotwin.movieapp.R;
+import com.corypotwin.movieapp.Review;
 import com.corypotwin.movieapp.ReviewsAndTrailers;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.NetworkPolicy;
@@ -37,24 +38,19 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, ReviewsAndTrailers>
 
     private final String LOG_TAG = "DetailDataFetcher";
 
-    private int movieId;
     private String reviewUrl;
     private String trailerUrl;
     private Context mContext;
-    private View mRootView;
     private MovieDetailsFragment mMdf;
 
-    private String youtubeBaseVideoUrl = "https://www.youtube.com/watch?v=";
-    private String youtubeBaseJpgUrl = "http://img.youtube.com/vi/";
 
-    public DetailDataFetcher(int id, String rUrl, String tUrl, Context context, View rootView,
+    public DetailDataFetcher(String rUrl, String tUrl, Context context,
                              MovieDetailsFragment mdf)
             throws MalformedURLException{
-        movieId = id;
+
         reviewUrl = rUrl;
         trailerUrl = tUrl;
         mContext = context;
-        mRootView = rootView;
         mMdf = mdf;
     }
 
@@ -72,8 +68,8 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, ReviewsAndTrailers>
         String reviewJsonStr = "";
         String trailerJsonStr = "";
 
-        List<List<String>> reviews = new ArrayList<>();
-        List<String> trailers = new ArrayList<>();
+        ArrayList<Review> reviews = new ArrayList<>();
+        ArrayList<String> trailers = new ArrayList<>();
 
         // Retrieve JSON for Reviews
         try {
@@ -123,90 +119,21 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, ReviewsAndTrailers>
      */
     protected void onPostExecute(ReviewsAndTrailers revsAndTrailsForThisMovie){
 
-        // Add trailers to the detail review if any exist.
-        if (revsAndTrailsForThisMovie.hasTrailers()){
 
-            mMdf.setFirstYoutubeTrailerToShare(youtubeBaseVideoUrl +
-                    revsAndTrailsForThisMovie.getTrailers().get(0));
-
-            LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            List<String> allTrailers = revsAndTrailsForThisMovie.getTrailers();
-
-            TextView trailersHeader = (TextView) mRootView.findViewById(R.id.trailer_header);
-            trailersHeader.setText(mContext.getString(R.string.trailers_header));
-
-            ViewGroup insertPoint = (ViewGroup) mRootView.findViewById(R.id.trailers_container);
-
-            for (int i = 0; i < revsAndTrailsForThisMovie.trailerSize(); i++) {
-
-                View trailerView = vi.inflate(R.layout.trailer_item, null);
-
-                ImageView image = (ImageView) trailerView.findViewById(R.id.trailer_image);
-                TextView text = (TextView) trailerView.findViewById(R.id.trailer_title);
-
-                String imageUrl = youtubeBaseJpgUrl +
-                        revsAndTrailsForThisMovie.getTrailers().get(i) + "/0.jpg";
-
-                Picasso.with(mContext).
-                        load(imageUrl).
-                        memoryPolicy(MemoryPolicy.NO_CACHE).
-                        networkPolicy(NetworkPolicy.NO_CACHE).
-                        placeholder(R.drawable.no_image_available_black).
-                        error(R.drawable.no_image_available_black).
-                        into(image);
-
-                text.setText("Trailer " + (i + 1));
-
-                final Uri youtubeUrl = Uri.parse(youtubeBaseVideoUrl +
-                        revsAndTrailsForThisMovie.getTrailers().get(i));
-
-                // Setup trailers so each points to the corresponding Youtube link
-                trailerView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-
-                        Intent videoIntent =new Intent(Intent.ACTION_VIEW);
-                        videoIntent.setData(youtubeUrl);
-
-                        if (videoIntent.resolveActivity(mContext.getPackageManager()) != null) {
-                            mContext.startActivity(videoIntent);
-                        } else {
-                            Log.d(LOG_TAG, "Couldn't call " + youtubeUrl + ", no receiving apps installed!");
-                        }
-                    }
-                });
-
-                insertPoint.addView(trailerView, i, new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-            }
+        if (revsAndTrailsForThisMovie.hasTrailers()) {
+            // Store Trailers in the Fragment as well as add one to the shareintent
+            mMdf.storeTrailers(revsAndTrailsForThisMovie.getTrailers());
+            mMdf.setFirstYoutubeTrailerToShare(revsAndTrailsForThisMovie.getTrailers().get(0));
+            // Add trailers to the detail review if any exist.
+            mMdf.insertTrailersBackIn(revsAndTrailsForThisMovie.getTrailers());
         }
 
-        // Add reviews to the detail view if any exist
+
         if (revsAndTrailsForThisMovie.hasReviews()){
-
-            LayoutInflater vi = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            List<List<String>> allReviews = revsAndTrailsForThisMovie.getReviews();
-
-            TextView reviewHeader = (TextView) mRootView.findViewById(R.id.reviews_header);
-            reviewHeader.setText(mContext.getString(R.string.reviews_header));
-
-            ViewGroup insertPoint = (ViewGroup) mRootView.findViewById(R.id.reviews_container);
-
-            for (int i = 0; i < revsAndTrailsForThisMovie.reviewsSize(); i++) {
-
-                View reviewView = vi.inflate(R.layout.review_item, null);
-
-                TextView review = (TextView) reviewView.findViewById(R.id.review_body);
-                TextView reviewer = (TextView) reviewView.findViewById(R.id.reviewer_name);
-
-                review.setText(allReviews.get(i).get(0));
-                reviewer.setText("-" + allReviews.get(i).get(1));
-
-                insertPoint.addView(reviewView, i, new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-
-            }
+            // Store Reviews in the Fragment.
+            mMdf.storeReviews(revsAndTrailsForThisMovie.getReviews());
+            // Add reviews to the detail view if any exist
+            mMdf.insertReviewsBackIn(revsAndTrailsForThisMovie.getReviews());
         }
     }
 
@@ -219,9 +146,9 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, ReviewsAndTrailers>
      * its author.
      * @throws JSONException
      * */
-    private List<List<String>> getReviewDataFromJson(String urlReturns) throws JSONException {
+    private ArrayList<Review> getReviewDataFromJson(String urlReturns) throws JSONException {
 
-        List<List<String>> reviews = new ArrayList<>();
+        ArrayList<Review> reviews = new ArrayList<>();
         final String NODE_RESULTS = "results";
         final String AUTHOR_KEY = "author";
         final String CONTENT_ID = "content";
@@ -236,7 +163,7 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, ReviewsAndTrailers>
             String author = individualReview.getString(AUTHOR_KEY);
             String review = individualReview.getString(CONTENT_ID);
 
-            List<String> reviewWithAuthor = Arrays.asList(review, author);
+            Review reviewWithAuthor = new Review(review, author);
             reviews.add(reviewWithAuthor);
         }
 
@@ -251,9 +178,9 @@ public class DetailDataFetcher extends AsyncTask<Void, Void, ReviewsAndTrailers>
      * @return - A list containing the youtube identifier.
      * @throws JSONException
      * */
-    private List<String> getTrailerDataFromJson(String urlReturns) throws JSONException {
+    private ArrayList<String> getTrailerDataFromJson(String urlReturns) throws JSONException {
 
-        List<String> trailers = new ArrayList<>();
+        ArrayList<String> trailers = new ArrayList<>();
 
         final String NODE_RESULTS = "results";
         final String TRAILER_KEY = "key";

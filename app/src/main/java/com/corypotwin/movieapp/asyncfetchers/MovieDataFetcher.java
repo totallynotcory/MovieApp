@@ -12,6 +12,7 @@ import android.util.Log;
 import android.widget.TextView;
 
 import com.corypotwin.movieapp.ImageAdapter;
+import com.corypotwin.movieapp.MainActivityFragment;
 import com.corypotwin.movieapp.Movie;
 import com.corypotwin.movieapp.R;
 import com.corypotwin.movieapp.SecretKeyFile;
@@ -35,23 +36,24 @@ import java.util.List;
  * grid view and inform the app that data has changed
  *
  */
-public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
+public class MovieDataFetcher extends AsyncTask<Void, Void, ArrayList<Movie>> {
 
     private final Context mContext;
     private final ImageAdapter mImageAdapter;
     private final String mSortBy;
     private final Activity mActivity;
-
-    //  TODO for future versions, it might be necessary to change the width of the imported images
+    private final MainActivityFragment mMaf;
 
     private String screenSize = "w185";
 
     public MovieDataFetcher(Context context, Activity activity,
-                            ImageAdapter imageAdapter, String sortBySetting) {
+                            ImageAdapter imageAdapter, String sortBySetting,
+                            MainActivityFragment activityFragment) {
         mContext = context;
         mImageAdapter = imageAdapter;
         this.mSortBy = sortBySetting;
         mActivity = activity;
+        mMaf = activityFragment;
     }
 
 
@@ -64,7 +66,7 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
     // .gitignore file.
     String secretKey = SecretKeyFile.getKey();
 
-    protected List<Movie> doInBackground(Void... params) {
+    protected ArrayList<Movie> doInBackground(Void... params) {
 
         String movieJsonStr = "";
         URL url;
@@ -107,10 +109,10 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
         return null;
     }
 
-    protected void onPostExecute(List<Movie> movieResults){
+    protected void onPostExecute(ArrayList<Movie> movieResults){
         TextView noConnection = (TextView) mActivity.findViewById(R.id.no_connection);
 
-
+        mMaf.setMovieData(movieResults);
 
         if (movieResults != null){
             mImageAdapter.clear();
@@ -123,9 +125,7 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
             noConnection.setText("Cannot Establish Connection");
         }
         mImageAdapter.notifyDataSetChanged();
-
     }
-
 
     /**
      * Used by the MovieFetcherClass to parse the Movie Data from the JSON string returned
@@ -136,9 +136,9 @@ public class MovieDataFetcher extends AsyncTask<Void, Void, List<Movie>> {
      *  release date, poster image)
      * @throws JSONException
      */
-    private List<Movie> getMovieDataFromJson(String urlReturns) throws JSONException {
+    private ArrayList<Movie> getMovieDataFromJson(String urlReturns) throws JSONException {
 
-        List<Movie> movieData = new ArrayList<>();
+        ArrayList<Movie> movieData = new ArrayList<>();
 
         final String NODE_RESULTS = "results";
         final String POSTER_KEY = "poster_path";

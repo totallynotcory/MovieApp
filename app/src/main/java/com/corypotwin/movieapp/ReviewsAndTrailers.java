@@ -1,5 +1,6 @@
 package com.corypotwin.movieapp;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -8,20 +9,20 @@ import java.util.List;
 
 public class ReviewsAndTrailers {
 
-    private List<List<String>> reviews;
-    private List<String> trailers;
+    private ArrayList<Review> reviews;
+    private ArrayList<String> trailers;
 
-    public ReviewsAndTrailers(List<List<String>> revs, List<String> trails){
+    public ReviewsAndTrailers(ArrayList<Review> revs, ArrayList<String> trails){
         reviews = revs;
         trailers = trails;
     }
 
     // Review Related Functions
-    public List<List<String>> getReviews() {
+    public ArrayList<Review> getReviews() {
         return reviews;
     }
 
-    public void setReviews(List<List<String>> reviews) {
+    public void setReviews(ArrayList<Review> reviews) {
         this.reviews = reviews;
     }
 
@@ -38,11 +39,11 @@ public class ReviewsAndTrailers {
     }
 
     // Trailer related functions
-    public List<String> getTrailers() {
+    public ArrayList<String> getTrailers() {
         return trailers;
     }
 
-    public void setTrailers(List<String> trailers) {
+    public void setTrailers(ArrayList<String> trailers) {
         this.trailers = trailers;
     }
 

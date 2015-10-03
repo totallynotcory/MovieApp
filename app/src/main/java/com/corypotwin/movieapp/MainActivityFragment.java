@@ -7,6 +7,7 @@ import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,7 @@ import com.corypotwin.movieapp.asyncfetchers.MovieDataFetcher;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
 import com.corypotwin.movieapp.provider.favorites.FavoritesSelection;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,6 +38,10 @@ public class MainActivityFragment extends Fragment {
     private GridView mGridView;
     private String sortBySetting;
 
+    private ArrayList<Movie> movieData;
+
+    private final String MOVIE_ARRAY = "Movie Array";
+
     private final String POSITION = "position";
     private int mPosition;
 
@@ -49,26 +55,6 @@ public class MainActivityFragment extends Fragment {
     }
 
     @Override
-    public void onStart(){
-        super.onStart();
-
-        // Grab the sortBy preference
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        String sortBy = prefs.getString(
-                getString(R.string.pref_sort_by_key),
-                getString(R.string.pref_sort_by_default));
-
-        // If the previous sortBy preference does not match the current preference,
-        // we need to refresh. This include the initial load as well.
-        if(!sortBy.equals(sortBySetting)){
-            sortBySetting = sortBy;
-            refreshMovieData();
-
-        }
-
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
@@ -76,27 +62,10 @@ public class MainActivityFragment extends Fragment {
         if (savedInstanceState != null && savedInstanceState.containsKey(POSITION)) {
             mPosition = savedInstanceState.getInt(POSITION);
         }
-    }
 
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_refresh) {
-            refreshMovieData();
-            return true;
+        if (savedInstanceState != null && savedInstanceState.containsKey(MOVIE_ARRAY)) {
+            movieData = savedInstanceState.getParcelableArrayList(MOVIE_ARRAY);
         }
-        if (id == R.id.action_settings) {
-            Intent settingActivityIntent = new Intent(getActivity(), SettingsActivity.class);
-            startActivity(settingActivityIntent);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
@@ -120,13 +89,47 @@ public class MainActivityFragment extends Fragment {
         return rootView;
     }
 
+    @Override
+    public void onStart(){
+        super.onStart();
+
+        // Grab the sortBy preference
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        String sortBy = prefs.getString(
+                getString(R.string.pref_sort_by_key),
+                getString(R.string.pref_sort_by_default));
+
+        if(movieData != null){
+            insertDataBackIntoImageAdapter();
+        }
+        // If the previous sortBy preference does not match the current preference,
+        // we need to refresh. This include the initial load as well.
+        if(!sortBy.equals(sortBySetting)){
+            sortBySetting = sortBy;
+            refreshMovieData();
+        }
+    }
+
+
+
+    /**
+     * Recreates the information previously stored in the image adapter.
+     */
+    private void insertDataBackIntoImageAdapter(){
+        mImageAdapter.clear();
+        for (int i = 0; i < movieData.size(); i++) {
+            mImageAdapter.add(movieData.get(i));
+        }
+        mImageAdapter.notifyDataSetChanged();
+    }
+
     /**
      * Refreshes the movie data from the MovieDB API
      */
     public void refreshMovieData() {
         if(!sortBySetting.equals("favorites")) {
             MovieDataFetcher refresher = new MovieDataFetcher(getActivity(), getActivity(),
-                    mImageAdapter, sortBySetting);
+                    mImageAdapter, sortBySetting, this);
             refresher.execute();
         } else {
             insertFavoriteMovies();
@@ -172,6 +175,17 @@ public class MainActivityFragment extends Fragment {
     public interface Callback {
         public void onItemSelected(Movie singleMovieDetails);
         }
+
+    public void setMovieData(ArrayList<Movie> movieData) {
+        this.movieData = movieData;
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putParcelableArrayList(MOVIE_ARRAY, movieData);
+        savedInstanceState.putInt(POSITION, mPosition);
+        super.onSaveInstanceState(savedInstanceState);
+    }
 }
 
 
