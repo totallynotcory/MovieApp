@@ -9,6 +9,10 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 
+/**
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
+ */
 public abstract class AbstractSelection<T extends AbstractSelection<?>> {
     private static final String EQ = "=?";
     private static final String PAREN_OPEN = "(";

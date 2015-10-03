@@ -11,6 +11,9 @@ import android.support.annotation.Nullable;
 import com.corypotwin.movieapp.provider.base.AbstractContentValues;
 
 /**
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
+ *
  * Content values wrapper for the {@code favorites} table.
  */
 public class FavoritesContentValues extends AbstractContentValues {

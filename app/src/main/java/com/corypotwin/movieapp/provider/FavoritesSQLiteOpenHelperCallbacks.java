@@ -8,9 +8,8 @@ import android.util.Log;
 import com.corypotwin.movieapp.BuildConfig;
 
 /**
- * Implement your custom database creation or upgrade code here.
- *
- * This file will not be overwritten if you re-run the content provider generator.
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
  */
 public class FavoritesSQLiteOpenHelperCallbacks {
     private static final String TAG = FavoritesSQLiteOpenHelperCallbacks.class.getSimpleName();

@@ -17,6 +17,10 @@ import android.provider.BaseColumns;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+/**
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
+ */
 public abstract class BaseContentProvider extends ContentProvider {
     public static final String QUERY_NOTIFY = "QUERY_NOTIFY";
     public static final String QUERY_GROUP_BY = "QUERY_GROUP_BY";

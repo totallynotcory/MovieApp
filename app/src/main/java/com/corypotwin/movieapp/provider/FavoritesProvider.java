@@ -14,6 +14,11 @@ import com.corypotwin.movieapp.BuildConfig;
 import com.corypotwin.movieapp.provider.base.BaseContentProvider;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
 
+/**
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
+ */
+
 public class FavoritesProvider extends BaseContentProvider {
     private static final String TAG = FavoritesProvider.class.getSimpleName();
 

@@ -10,6 +10,9 @@ import android.net.Uri;
 import com.corypotwin.movieapp.provider.base.AbstractSelection;
 
 /**
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
+ *
  * Selection for the {@code favorites} table.
  */
 public class FavoritesSelection extends AbstractSelection<FavoritesSelection> {

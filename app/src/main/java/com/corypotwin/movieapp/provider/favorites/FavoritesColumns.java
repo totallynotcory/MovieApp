@@ -7,7 +7,8 @@ import com.corypotwin.movieapp.provider.FavoritesProvider;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
 
 /**
- * A users favorite movies
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
  */
 public class FavoritesColumns implements BaseColumns {
     public static final String TABLE_NAME = "favorites";

@@ -5,6 +5,10 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.net.Uri;
 
+/**
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
+ */
 public abstract class AbstractContentValues {
     protected final ContentValues mContentValues = new ContentValues();
 

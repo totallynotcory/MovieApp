@@ -9,6 +9,9 @@ import android.support.annotation.Nullable;
 import com.corypotwin.movieapp.provider.base.AbstractCursor;
 
 /**
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
+ *
  * Cursor wrapper for the {@code favorites} table.
  */
 public class FavoritesCursor extends AbstractCursor implements FavoritesModel {

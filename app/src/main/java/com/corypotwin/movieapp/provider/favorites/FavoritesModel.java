@@ -8,7 +8,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
- * A users favorite movies
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
  */
 public interface FavoritesModel extends BaseModel {
 

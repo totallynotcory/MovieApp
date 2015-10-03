@@ -7,6 +7,10 @@ import android.database.Cursor;
 import android.database.CursorWrapper;
 import android.provider.BaseColumns;
 
+/**
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
+ */
 public abstract class AbstractCursor extends CursorWrapper {
     private final HashMap<String, Integer> mColumnIndexes;
 

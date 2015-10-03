@@ -12,6 +12,10 @@ import android.util.Log;
 import com.corypotwin.movieapp.BuildConfig;
 import com.corypotwin.movieapp.provider.favorites.FavoritesColumns;
 
+/**
+ * Code generated using android-contentprovider-generator:
+ * https://github.com/BoD/android-contentprovider-generator
+ */
 public class FavoritesSQLiteOpenHelper extends SQLiteOpenHelper {
     private static final String TAG = FavoritesSQLiteOpenHelper.class.getSimpleName();
 
