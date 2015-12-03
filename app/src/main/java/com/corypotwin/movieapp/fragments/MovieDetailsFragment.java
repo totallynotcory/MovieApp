@@ -85,9 +85,16 @@ public class MovieDetailsFragment extends Fragment {
                              Bundle savedInstanceState) {
         mRootView = inflater.inflate(R.layout.fragment_movie_details, container, false);
 
+
+
         Bundle args = getArguments();
         if(args != null){
             movieDetails = args.getParcelable(MainActivity.INDIVIDUAL_MOVIE_TAG);
+
+            String transitionName = getString(R.string.transition_movie) + movieDetails.getmPosition();
+            View targetTransitionView = mRootView.findViewById(R.id.movie_poster_detail);
+            targetTransitionView.setTransitionName(transitionName);
+
             if(savedInstanceState == null) {
                 updateReviewsAndTrailers();
             }

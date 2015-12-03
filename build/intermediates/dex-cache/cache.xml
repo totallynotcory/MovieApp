@@ -2,6 +2,13 @@
 <items version="2" >
 
     <item
+        jar="/Users/ctpotwin/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
+        <dex dex="/Users/ctpotwin/AndroidStudioProjects/MovieApp/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-1f58f7558805379f9e695d60f998f037dc77566d.jar" />
+    </item>
+    <item
         jar="/Users/ctpotwin/AndroidStudioProjects/MovieApp/app/build/intermediates/exploded-aar/com.android.support/support-v4/22.2.1/jars/classes.jar"
         jumboMode="false"
         revision="22.0.1"
@@ -16,25 +23,18 @@
         <dex dex="/Users/ctpotwin/AndroidStudioProjects/MovieApp/app/build/intermediates/pre-dexed/debug/internal_impl-22.2.1-405eae6a7964e9bcbef82c64eeb5db7de8674570.jar" />
     </item>
     <item
-        jar="/Users/ctpotwin/AndroidStudioProjects/MovieApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars/classes.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
-        <dex dex="/Users/ctpotwin/AndroidStudioProjects/MovieApp/app/build/intermediates/pre-dexed/debug/classes-7d43b0fd5974118db03982149e2db93c82164775.jar" />
-    </item>
-    <item
-        jar="/Users/ctpotwin/Library/Android/sdk/extras/android/m2repository/com/android/support/support-annotations/22.2.1/support-annotations-22.2.1.jar"
-        jumboMode="false"
-        revision="22.0.1"
-        sha1="61a0ff5c29295ec56d7e0bd3d25d95dbf71b4b2b">
-        <dex dex="/Users/ctpotwin/AndroidStudioProjects/MovieApp/app/build/intermediates/pre-dexed/debug/support-annotations-22.2.1-1f58f7558805379f9e695d60f998f037dc77566d.jar" />
-    </item>
-    <item
         jar="/Users/ctpotwin/.gradle/caches/modules-2/files-2.1/com.squareup.picasso/picasso/2.5.2/7446d06ec8d4f7ffcc53f1da37c95f200dcb9387/picasso-2.5.2.jar"
         jumboMode="false"
         revision="22.0.1"
         sha1="7446d06ec8d4f7ffcc53f1da37c95f200dcb9387">
         <dex dex="/Users/ctpotwin/AndroidStudioProjects/MovieApp/app/build/intermediates/pre-dexed/debug/picasso-2.5.2-650b8d41e4cdfd69e0b4650e6dcb658af8ba1fc2.jar" />
+    </item>
+    <item
+        jar="/Users/ctpotwin/AndroidStudioProjects/MovieApp/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/22.2.1/jars/classes.jar"
+        jumboMode="false"
+        revision="22.0.1"
+        sha1="4486e953d1f35f8ccab098b1dd67146366d5f731">
+        <dex dex="/Users/ctpotwin/AndroidStudioProjects/MovieApp/app/build/intermediates/pre-dexed/debug/classes-7d43b0fd5974118db03982149e2db93c82164775.jar" />
     </item>
 
 </items>

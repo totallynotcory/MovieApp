@@ -21,6 +21,8 @@ public class Movie implements Parcelable{
     private String mTrailerUrl;
     private String mReviewsUrl;
 
+    private int mPosition;
+
     public Movie(int id, String title, String description, String rating, String releaseDate,
                     String posterUrl, String reviews, String trailerUrl){
         mId = id;
@@ -139,5 +141,13 @@ public class Movie implements Parcelable{
     }
 
 
+
+    public int getmPosition() {
+        return mPosition;
+    }
+
+    public void setmPosition(int mPosition) {
+        this.mPosition = mPosition;
+    }
 
 }

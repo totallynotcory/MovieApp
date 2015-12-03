@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +81,8 @@ public class MainActivityFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                 mPosition = position;
                 Movie singleMovieDetails = mImageAdapter.getFullSingleMovieDetails(position);
-                ((Callback) getActivity()).onItemSelected(singleMovieDetails);
+                singleMovieDetails.setmPosition(position);
+                ((Callback) getActivity()).onItemSelected(singleMovieDetails, position);
             }
         });
 
@@ -179,7 +181,7 @@ public class MainActivityFragment extends Fragment {
      * Otherwise, nothing will happen when a Movie is clicked
      */
     public interface Callback {
-        public void onItemSelected(Movie singleMovieDetails);
+        public void onItemSelected(Movie singleMovieDetails, int position);
         }
 
     public void setMovieData(ArrayList<Movie> movieData) {

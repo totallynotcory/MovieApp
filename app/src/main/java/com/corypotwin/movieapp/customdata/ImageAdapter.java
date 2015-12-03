@@ -1,6 +1,7 @@
 package com.corypotwin.movieapp.customdata;
 
 import android.content.Context;
+import android.os.Build;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -71,6 +72,11 @@ public class ImageAdapter extends BaseAdapter  {
             imageView.setAdjustViewBounds(true);
         } else {
             imageView = (ImageView) convertView;
+        }
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            String transitionName = mContext.getString(R.string.transition_movie) + position;
+            imageView.setTransitionName(transitionName);
         }
 
         String url = getItem(position);

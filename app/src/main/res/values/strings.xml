@@ -3,6 +3,9 @@
     <string name="app_name" translatable="false">Movie App</string>
     <string name="title_activity_movie_details" translatable="false">Details</string>
 
+    <!-- Transition Action -->
+    <string name="transition_movie" translatable="false">movieposter</string>
+
     <!-- Actions -->
     <string name="action_settings" translatable="false">Settings</string>
     <string name="action_refresh" translatable="false">Refresh</string>
@@ -13,9 +16,9 @@
     <string name="no_release_date">No release date!</string>
     <string name="no_title">No title! How did that happen?</string>
 
+    <!-- Detail view Headers and String -->
     <string name="trailers_header">Trailers: </string>
     <string name="reviews_header">Reviews: </string>
-
     <string name="not_favorite">Favorite?</string>
     <string name="favorite">Favorited!</string>
 </resources>

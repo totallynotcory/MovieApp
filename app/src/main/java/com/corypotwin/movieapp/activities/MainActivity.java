@@ -1,6 +1,9 @@
 package com.corypotwin.movieapp.activities;
 
+import android.annotation.TargetApi;
+import android.app.ActivityOptions;
 import android.content.Intent;
+import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -86,8 +89,9 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         mDetailsFragment.favoriteClick(v);
     }
 
+    @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
-    public void onItemSelected(Movie singleMovieDetails) {
+    public void onItemSelected(Movie singleMovieDetails, int position) {
         if (mTwoPane) {
             // In two-pane mode, show the detail view in this activity by
             // adding or replacing the detail fragment using a
@@ -104,7 +108,17 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
         } else {
             Intent intent = new Intent(this, MovieDetails.class)
                     .putExtra(Intent.EXTRA_TEXT, singleMovieDetails);
-            startActivity(intent);
+
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                String transitionName = getString(R.string.transition_movie) + position;
+                View sharedView = findViewById(R.id.movie_poster_image_view);
+                Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(
+                        this, sharedView, transitionName).toBundle();
+                startActivity(intent, bundle);
+            } else{
+                startActivity(intent);
+            }
+
         }
     }
 }

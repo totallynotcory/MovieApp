@@ -33,6 +33,7 @@
 
         <ImageView
             android:id="@+id/movie_poster_detail"
+            android:transitionName="@string/transition_movie"
             android:layout_width="150dp"
             android:layout_height="wrap_content"
             android:src="@drawable/no_image_available_black"
