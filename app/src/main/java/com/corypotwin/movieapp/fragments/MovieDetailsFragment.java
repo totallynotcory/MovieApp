@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Build;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
@@ -91,9 +92,11 @@ public class MovieDetailsFragment extends Fragment {
         if(args != null){
             movieDetails = args.getParcelable(MainActivity.INDIVIDUAL_MOVIE_TAG);
 
-            String transitionName = getString(R.string.transition_movie) + movieDetails.getmPosition();
-            View targetTransitionView = mRootView.findViewById(R.id.movie_poster_detail);
-            targetTransitionView.setTransitionName(transitionName);
+            if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                String transitionName = getString(R.string.transition_movie) + movieDetails.getmPosition();
+                View targetTransitionView = mRootView.findViewById(R.id.movie_poster_detail);
+                targetTransitionView.setTransitionName(transitionName);
+                }
 
             if(savedInstanceState == null) {
                 updateReviewsAndTrailers();
