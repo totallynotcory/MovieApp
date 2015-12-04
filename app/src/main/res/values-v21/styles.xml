@@ -1,4 +1,5 @@
 <resources>
+
     <!-- Settings activity theme. -->
     <style name="SettingsTheme" parent="@android:style/Theme.Material.Light.DarkActionBar">
         <item name="android:colorPrimary">@color/weird_blue</item>

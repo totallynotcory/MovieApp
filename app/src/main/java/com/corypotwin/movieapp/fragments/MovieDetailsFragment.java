@@ -10,7 +10,9 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.ShareActionProvider;
+import android.transition.Slide;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -78,6 +80,12 @@ public class MovieDetailsFragment extends Fragment {
 
         if (savedInstanceState != null && savedInstanceState.containsKey(REVIEWS)) {
             mReviews = savedInstanceState.getParcelableArrayList(REVIEWS);
+        }
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Slide slide = new Slide(Gravity.BOTTOM);
+            slide.addTarget(R.id.description);
+            getActivity().getWindow().setEnterTransition(slide);
         }
     }
 

@@ -113,7 +113,8 @@ public class MainActivity extends AppCompatActivity implements MainActivityFragm
                 String transitionName = getString(R.string.transition_movie) + position;
                 View sharedView = findViewById(R.id.movie_poster_image_view);
                 Bundle bundle = ActivityOptions.makeSceneTransitionAnimation(
-                        this, sharedView, transitionName).toBundle();
+                        this).toBundle();
+//                        this, sharedView, transitionName).toBundle();
                 startActivity(intent, bundle);
             } else{
                 startActivity(intent);
