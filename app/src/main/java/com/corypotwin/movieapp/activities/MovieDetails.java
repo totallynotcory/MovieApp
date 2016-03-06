@@ -23,7 +23,6 @@ public class MovieDetails extends AppCompatActivity {
         getSupportActionBar().setElevation(0f);
 
         if (savedInstanceState == null){
-
             Bundle args = new Bundle();
             args.putParcelable(MainActivity.INDIVIDUAL_MOVIE_TAG,
                     getIntent().getParcelableExtra(Intent.EXTRA_TEXT));
