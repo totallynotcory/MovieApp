@@ -1,18 +1,14 @@
-Movie App
-=========
+#Movie App
 Project built for the Udacity Android Nanodegree
 
-Description:
-------------
+##Description:
 In the second project for the Udacity Android Nanodegree, students are asked to create an App to discorver new movies.  Through two classes, the students are brought from the very basics of App creation to expand on the intricacies of many essential parts of Android development.  This App makes use of several libraries, a movie database API, follows material design conventions, has portrait and landscape as well as table and phone designs, and includes many more fundamentals of Android App creation.
 
-Getting Started
----------------
+##Getting Started
 This sample uses the Gradle build system.  To build this project, use the
 "gradlew build" command or use "Import Project" in Android Studio.
 
-Features:
----------
+##Features:
 - Presents the user with a grid arrangement of movie posters upon launch.
 - Allows the user to change contents via a setting: Highest-Rated, Most Popular, or Favorites. 
 - For phones, allows the user to tap on a movie poster and transition to a details screen with additional information.
